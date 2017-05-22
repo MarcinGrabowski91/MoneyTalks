@@ -7,7 +7,7 @@ public interface LoginContract {
     interface View extends MvpViewRest {
         void showWrongCredentialsError();
 
-        void showMainView();
+        void showLoginSuccessfulView();
 
         void showDataFillError();
 

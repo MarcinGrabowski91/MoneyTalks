@@ -2,4 +2,5 @@
 <resources>
     <dimen name="spacing_normal">16dp</dimen>
     <dimen name="font_small">10sp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
 </resources>
