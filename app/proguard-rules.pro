@@ -16,6 +16,7 @@
 #   public *;
 #}
 
+
 # base option from *App Dev Note*
 -optimizationpasses 5
 -dontusemixedcaseclassnames
@@ -38,18 +39,31 @@
     public static *** d(...);
 }
 
+
 # app compat-v7
 -keep class android.support.v7.widget.SearchView { *; }
+
 
 # FragmentArgs
 -keep class com.hannesdorfmann.fragmentargs.** { *; }
 
+
 # Gson
 -keep class sun.misc.Unsafe { *; }
+
 
 # retrofit
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
+-keepnames class rx.Single
+-keepnames class rx.Completable
+-keepattributes Signature
+-keepattributes Exceptions
+-keepattributes *Annotation*
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
 
 # dagger
 -keepclassmembers,allowobfuscation class * {
@@ -64,10 +78,12 @@
 -keep class dagger.** { *; }
 -dontwarn dagger.internal.codegen.**
 
+
 # xlog
 -keep class com.promegu.xlog.** { *; }
 -dontwarn javax.lang.**
 -dontwarn javax.tools.**
+
 
 # stetho
 -dontwarn org.apache.http.**
@@ -76,18 +92,22 @@
 -dontwarn com.facebook.stetho.dumpapp.**
 -dontwarn com.facebook.stetho.server.**
 
+
 # leak canary
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
 -dontwarn android.app.Notification
 
+
 # fabric
 -dontwarn com.crashlytics.android.**
+
 
 # rx
 -keep class rx.internal.util.unsafe.** { *; }
 -dontwarn sun.misc.Unsafe
 -dontwarn java.lang.invoke.*
+
 
 # glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
@@ -96,9 +116,9 @@
   public *;
 }
 
--dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn javax.annotation.**
+
 
 # BugTags
 -keep class com.bugtags.library.** {*;}
@@ -106,18 +126,49 @@
 -dontwarn android.net.http.AndroidHttpClient
 -dontwarn com.bugtags.library.**
 
+# RecyclerViewPager
+-keep class com.lsjwzh.widget.recyclerviewpager.**
+-dontwarn com.lsjwzh.widget.recyclerviewpager.**
+
+
 # AutoBundle
 -keepclasseswithmembernames class * {
     @com.yatatsu.autobundle.AutoBundleField <fields>;
 }
+
 
 # AutoGson
 -keepclassmembers class **$AutoValue_*$GsonTypeAdapter {
     void <init>(com.google.gson.Gson);
 }
 
+
 # AutoParcel
 -keep class **AutoValue_*$1 { }
 -keepclassmembers class * implements android.os.Parcelable {
     static ** CREATOR;
 }
+
+## Joda Time
+
+-dontwarn org.joda.convert.**
+-dontwarn org.joda.time.**
+-keep class org.joda.time.** { *; }
+-keep interface org.joda.time.** { *; }
+
+#GreenDao
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+# If you do not use SQLCipher:
+-dontwarn org.greenrobot.greendao.database.**
+
+# icepick
+-dontwarn icepick.**
+-keep class icepick.** { *; }
+-keep class **$$Icepick { *; }
+-keepclasseswithmembernames class * {
+    @icepick.* <fields>;
+}
+-keepnames class * { @icepick.State *;}

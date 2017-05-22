@@ -1,0 +1,19 @@
+package eu.gitcode.android.moneytalks.enumeration;
+
+public enum HttpExceptionEnum {
+    BAD_REQUEST(400),
+    UNAUTHORIZED(401),
+    FORBIDDEN(403),
+    NOT_FOUND(404),
+    INTERNAL_SERVER_ERROR(500),
+    SERVICE_UNAVAILABLE(503),
+    GATEWAY_TIMEOUT(504),
+    TIMEOUT(1),
+    UNDEFINED(0);
+
+    private final int value;
+
+    HttpExceptionEnum(int value) {
+        this.value = value;
+    }
+}

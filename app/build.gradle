@@ -7,7 +7,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "gitcode.eu.moneytalks"
@@ -100,6 +100,8 @@ dependencies {
     // Support
     compile libs.appCompat
     compile libs.recyclerView
+    compile libs.design
+    compile libs.cardView
 
     // MVP
     compile(libs.mosby) {
@@ -112,9 +114,14 @@ dependencies {
     apt proc.dagger
     provided proc.javaxAnnotation
 
-    // HockeyApp
-    compile libs.hockeyApp
+    //icepick
+    compile libs.icepick
+    provided proc.icepick
 
+    //retrofit
+    compile libs.retrofit
+    compile libs.retrofitGsonConverter
+    compile libs.retrofitRxJavaAdapter
     compile libs.rxJava
     compile(libs.rxAndroid) {
         exclude module: 'rxjava'
@@ -139,9 +146,16 @@ dependencies {
         exclude module: 'appcompat-v7'
     }
 
+    //onActivityResult
+    compile libs.onActivityResult
+    apt proc.onActivityResult
+
     // View
     compile libs.butterKnife
     apt proc.butterKnife
+
+    //JodaTime
+    compile libs.jodaTime
 
     // LeakCanary
     compile libs.leakCanary
