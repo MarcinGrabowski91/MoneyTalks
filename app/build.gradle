@@ -1,0 +1,188 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.autoscout24.gradle.todo'
+apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'com.frogermcs.androiddevmetrics'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+
+    defaultConfig {
+        applicationId "gitcode.eu.moneytalks"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "0.1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            versionNameSuffix "-DEBUG"
+            applicationIdSuffix ".debug"
+            testCoverageEnabled true
+            debuggable true
+            minifyEnabled true
+            shrinkResources false
+            useProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro', 'proguard-rules-test.pro'
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        mock {
+            versionNameSuffix "-SNAPSHOT"
+            applicationIdSuffix ".mock"
+        }
+        production {
+            //no-op
+        }
+    }
+
+    applicationVariants.all { variant ->
+        // remove unaligned apk files
+        variant.assemble.doLast {
+            variant.outputs.each { output ->
+                println "aligned " + output.outputFile
+                println "unaligned " + output.packageApplication.outputFile
+
+                File unaligned = output.packageApplication.outputFile;
+                File aligned = output.outputFile
+                if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
+                    println "deleting " + unaligned.getName()
+                    unaligned.delete()
+                }
+            }
+        }
+    }
+
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+dependencies {
+    // Timber
+    compile libs.timber
+
+    // Support
+    compile libs.appCompat
+    compile libs.recyclerView
+
+    // MVP
+    compile(libs.mosby) {
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-annotations'
+    }
+
+    // Dagger
+    compile libs.dagger
+    apt proc.dagger
+    provided proc.javaxAnnotation
+
+    // HockeyApp
+    compile libs.hockeyApp
+
+    compile libs.rxJava
+    compile(libs.rxAndroid) {
+        exclude module: 'rxjava'
+    }
+    compile(libs.rxBinding) {
+        exclude module: 'rxjava'
+        exclude module: 'rxandroid'
+        exclude module: 'support-annotations'
+    }
+    compile(libs.rxBindingAppCompat) {
+        exclude module: 'appcompat-v7'
+        exclude module: 'rxbinding'
+    }
+    compile(libs.rxLifeCycle) {
+        exclude module: 'rxjava'
+        exclude module: 'rxbinding'
+        exclude module: 'support-annotations'
+    }
+    compile(libs.rxLifeCycleComponent) {
+        exclude module: 'rxjava'
+        exclude module: 'rxlifecycle'
+        exclude module: 'appcompat-v7'
+    }
+
+    // View
+    compile libs.butterKnife
+    apt proc.butterKnife
+
+    // LeakCanary
+    compile libs.leakCanary
+
+    // Unit testing
+    testCompile(test.junit) {
+        exclude module: 'hamcrest-core'
+    }
+    testCompile test.hamcrest
+    testCompile test.mockito
+
+    androidTestCompile test.hamcrest
+    androidTestCompile libs.annotations
+    androidTestCompile(test.androidJUnitRunner) {
+        exclude module: 'support-annotations'
+    }
+    androidTestCompile(test.androidJUnit4Rules) {
+        exclude module: 'support-annotations'
+        exclude module: 'hamcrest-core'
+    }
+    androidTestCompile(test.espresso) {
+        exclude module: 'hamcrest-library'
+        exclude module: 'rules'
+        exclude module: 'runner'
+        exclude module: 'javax.annotation-api'
+        exclude module: 'support-annotations'
+    }
+    androidTestCompile(test.espressoContrib) {
+        exclude module: 'espresso-core'
+        exclude module: 'hamcrest-core'
+        exclude module: 'support-v4'
+        exclude module: 'appcompat-v7'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'support-annotations'
+        exclude module: 'design'
+    }
+    androidTestCompile(test.espressoIntents) {
+        exclude module: 'espresso-core'
+        exclude module: 'support-annotations'
+    }
+    androidTestCompile(test.espressoIdlingResource) {
+        exclude module: 'espresso-core'
+    }
+}
