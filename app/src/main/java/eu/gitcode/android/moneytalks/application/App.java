@@ -3,6 +3,8 @@ package eu.gitcode.android.moneytalks.application;
 import android.app.Application;
 import android.content.Context;
 
+import eu.gitcode.android.moneytalks.dagger.modules.AppModule;
+
 public class App extends Application {
 
     private ApplicationComponent appComponent;
@@ -24,6 +26,7 @@ public class App extends Application {
         // init dagger appComponent
         this.appComponent = DaggerApplicationComponent
                 .builder()
+                .appModule(new AppModule(this))
                 .build();
     }
 
