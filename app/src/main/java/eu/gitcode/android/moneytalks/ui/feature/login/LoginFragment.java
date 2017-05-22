@@ -14,6 +14,7 @@ import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.register.RegisterActivity;
 import eu.gitcode.android.moneytalks.utils.UIUtils;
 import onactivityresult.ActivityResult;
 import onactivityresult.OnActivityResult;
@@ -51,7 +52,7 @@ public class LoginFragment extends BaseMvpFragment<LoginContract.View, LoginCont
 
     @OnClick(R.id.new_account_txt)
     void onNewAccountClick() {
-        //TODO add new account view
+        RegisterActivity.startActivity(this, REGISTER_REQUEST_CODE);
     }
 
     @OnClick(R.id.log_in_btn)
@@ -68,7 +69,7 @@ public class LoginFragment extends BaseMvpFragment<LoginContract.View, LoginCont
     }
 
     @Override
-    public void showMainView() {
+    public void showLoginSuccessfulView() {
         // TODO add main activity
     }
 

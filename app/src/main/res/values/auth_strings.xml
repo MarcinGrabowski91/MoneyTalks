@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="re_password">Retype password</string>
+    <string name="new_account">New account</string>
+    <string name="wrong_email_or_password">Wrong email or password</string>
+    <string name="email_not_valid">Email is not valid</string>
+    <string name="register">Register</string>
+    <string name="passwords_not_the_same">Passwords are not the same</string>
+    <string name="email_already_taken">Email already taken</string>
+    <string name="password_too_short">Password is too short</string>
+    <string name="register_account">Register account</string>
+</resources>
