@@ -154,8 +154,12 @@ dependencies {
     compile libs.butterKnife
     apt proc.butterKnife
 
-    //JodaTime
+    // JodaTime
     compile libs.jodaTime
+
+    // AutoValue
+    provided proc.autoValue
+    apt proc.autoValue
 
     // LeakCanary
     compile libs.leakCanary

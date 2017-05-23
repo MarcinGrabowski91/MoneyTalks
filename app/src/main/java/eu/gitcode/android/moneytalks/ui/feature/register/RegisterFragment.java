@@ -14,6 +14,7 @@ import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.main.MainActivity;
 import eu.gitcode.android.moneytalks.utils.UIUtils;
 import onactivityresult.ActivityResult;
 
@@ -77,7 +78,8 @@ public class RegisterFragment extends BaseMvpFragment<RegisterContract.View, Reg
 
     @Override
     public void showRegisterSuccessView() {
-        //TODO add main view
+        MainActivity.startActivity(getContext());
+        getActivity().finish();
     }
 
     @Override

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="investments">Investments</string>
+    <string name="bought">Bought</string>
+    <string name="sell">Sell</string>
+    <string name="current_profit">Current profit</string>
+</resources>

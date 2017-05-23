@@ -13,6 +13,11 @@ public class DateUtils {
         throw new AssertionError();
     }
 
+    public static String getCurrentMonth() {
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("MMM yyyy");
+        return dtf.print(DateTime.now());
+    }
+
     public static String getDateStringFromDateTime(DateTime dateTime) {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("dd MMM yyyy");
         return dtf.print(dateTime);
@@ -26,11 +31,6 @@ public class DateUtils {
     public static String getShortDateStringFromDateTime(DateTime dateTime) {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("dd.MM.yy");
         return dtf.print(dateTime);
-    }
-
-    public static String getCurrentTimeStampForFilename() {
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("ddMMyy_HHmmssSSS");
-        return dtf.print(DateTime.now());
     }
 
     public static boolean isDatePassed(DateTime dateTime) {

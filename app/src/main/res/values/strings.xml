@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Money Talks</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="logout">Logout</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="currency">zł</string>
+    <string name="currency_amount">%1$d zł</string>
+    <string name="percent_amount">%1$.2f%%</string>
 </resources>
