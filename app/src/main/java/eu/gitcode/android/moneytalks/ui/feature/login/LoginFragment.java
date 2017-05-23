@@ -14,6 +14,7 @@ import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.main.MainActivity;
 import eu.gitcode.android.moneytalks.ui.feature.register.RegisterActivity;
 import eu.gitcode.android.moneytalks.utils.UIUtils;
 import onactivityresult.ActivityResult;
@@ -70,7 +71,8 @@ public class LoginFragment extends BaseMvpFragment<LoginContract.View, LoginCont
 
     @Override
     public void showLoginSuccessfulView() {
-        // TODO add main activity
+        MainActivity.startActivity(getContext());
+        getActivity().finish();
     }
 
     @Override
