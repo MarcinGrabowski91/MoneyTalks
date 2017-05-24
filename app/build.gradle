@@ -160,6 +160,7 @@ dependencies {
     // AutoValue
     provided proc.autoValue
     apt proc.autoValue
+    apt proc.autoParcel
 
     // LeakCanary
     compile libs.leakCanary

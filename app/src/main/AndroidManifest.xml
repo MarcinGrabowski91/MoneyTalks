@@ -28,5 +28,11 @@
             android:name=".ui.feature.register.RegisterActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.feature.budget.expenses.list.ExpensesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.feature.budget.expenses.show.ExpenseActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

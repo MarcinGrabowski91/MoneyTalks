@@ -1,11 +1,12 @@
 package eu.gitcode.android.moneytalks.models.ui;
 
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class Category {
+public abstract class Category implements Parcelable {
     public static Builder builder() {
         return new AutoValue_Category.Builder();
     }
