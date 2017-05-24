@@ -8,6 +8,7 @@ import com.squareup.leakcanary.LeakCanary;
 import javax.inject.Inject;
 
 import eu.gitcode.android.moneytalks.application.App;
+import timber.log.Timber;
 
 public final class DebugMetricsHelper {
 
@@ -22,6 +23,9 @@ public final class DebugMetricsHelper {
 
         // LeakCanary
         LeakCanary.install((App) context.getApplicationContext());
+
+        // Timber
+        Timber.plant(new Timber.DebugTree());
     }
 
 }

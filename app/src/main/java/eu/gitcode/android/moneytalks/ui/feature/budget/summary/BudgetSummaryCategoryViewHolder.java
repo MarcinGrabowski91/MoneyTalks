@@ -5,9 +5,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseViewHolder;
+import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.list.ExpensesActivity;
 
 public class BudgetSummaryCategoryViewHolder extends BaseViewHolder<Category> {
 
@@ -22,14 +24,19 @@ public class BudgetSummaryCategoryViewHolder extends BaseViewHolder<Category> {
 
     public BudgetSummaryCategoryViewHolder(ViewGroup parent) {
         super(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.budget_summary_category_view_holder, parent, false));
+                .inflate(R.layout.budget_category_view_holder, parent, false));
+    }
+
+    @OnClick(R.id.card_view)
+    void onCardViewClicked() {
+        ExpensesActivity.startActivity(itemView.getContext(), nameTxt.getText().toString());
     }
 
     @Override
     public void bind(Category item) {
         //TODO load real data
         nameTxt.setText(item.name());
-        spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), 1200));
+        spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), 1200f));
         percentTxt.setText(String.format(itemView.getResources().getString(R.string.percent_amount), 23.0));
     }
 }

@@ -63,12 +63,12 @@ public class SummaryFragment extends BaseMvpFragment<SummaryContract.View, Summa
     @Override
     public void showSummaryData() {
         //TODO load summary data from server
-        plannedBudgetTxt.setText(String.format(getString(R.string.currency_amount), 2500));
-        spentBudgetTxt.setText(String.format(getString(R.string.currency_amount), 1000));
-        summaryBudgetTxt.setText(String.format(getString(R.string.currency_amount), 1500));
-        boughtInvestmentsTxt.setText(String.format(getString(R.string.currency_amount), 2500));
-        sellInvestmentsTxt.setText(String.format(getString(R.string.currency_amount), 1200));
-        investmentsProfit.setText(String.format(getString(R.string.percent_amount), -12.4));
+        plannedBudgetTxt.setText(String.format(getString(R.string.currency_amount), 2500f));
+        spentBudgetTxt.setText(String.format(getString(R.string.currency_amount), 1000f));
+        summaryBudgetTxt.setText(String.format(getString(R.string.currency_amount), 1500f));
+        boughtInvestmentsTxt.setText(String.format(getString(R.string.currency_amount), 2500f));
+        sellInvestmentsTxt.setText(String.format(getString(R.string.currency_amount), 1200f));
+        investmentsProfit.setText(String.format(getString(R.string.percent_amount), -12.4f));
         summaryBudgetTxt.setEnabled(true);
         investmentsProfit.setEnabled(false);
     }
