@@ -8,6 +8,7 @@ import eu.gitcode.android.moneytalks.DebugMetricsHelper;
 import eu.gitcode.android.moneytalks.controllers.AuthController;
 import eu.gitcode.android.moneytalks.controllers.PreferenceController;
 import eu.gitcode.android.moneytalks.dagger.modules.AppModule;
+import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseComponent;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.list.ExpensesComponent;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show.ExpenseComponent;
 import eu.gitcode.android.moneytalks.ui.feature.budget.summary.BudgetSummaryComponent;
@@ -41,6 +42,8 @@ public interface ApplicationComponent {
     ExpensesComponent getExpensesComponent();
 
     ExpenseComponent getExpenseComponent();
+
+    AddEditExpenseComponent getAddEditExpenseComponent();
 
     void inject(App app);
 }

@@ -11,4 +11,7 @@
     <string name="percent_amount">%1$.2f%%</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
 </resources>

@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import eu.gitcode.android.moneytalks.controllers.PreferenceController;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;
+import eu.gitcode.android.moneytalks.models.ui.Expense;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
 import rx.subscriptions.CompositeSubscription;
 
@@ -29,5 +30,10 @@ public final class ExpensesFragmentPresenter extends MvpBasePresenterRest<Expens
     @Override
     public void handleBudgetData() {
         getView().showExpensesData();
+    }
+
+    @Override
+    public void handleRemoveExpense(Expense expense) {
+        getView().showRemoveSuccessView();
     }
 }

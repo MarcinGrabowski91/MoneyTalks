@@ -1,8 +1,10 @@
 package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.models.ui.Expense;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
 
 public class ExpenseFragment extends BaseMvpFragment<ExpenseContract.View,
@@ -76,8 +79,28 @@ public class ExpenseFragment extends BaseMvpFragment<ExpenseContract.View,
         dateTxt.setText(DateUtils.getLongDateStringFromDateTime(expense.date()));
         costTxt.setText(String.format(getString(R.string.currency_amount), expense.cost()));
         if (expense.category() != null) {
+            //noinspection ConstantConditions
             categoryTxt.setText(expense.category().name());
         }
         descriptionTxt.setText(expense.description());
+    }
+
+    @Override
+    public void showRemoveSuccessView() {
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
+    }
+
+    public void handleEditExpense() {
+        AddEditExpenseActivity.startActivityForResult(this, getPresenter().getExpense());
+    }
+
+    public void handleRemoveExpense() {
+        new AlertDialog.Builder(getContext())
+                .setMessage(R.string.remove_expense)
+                .setPositiveButton(R.string.yes, (dialog, which) ->
+                        getPresenter().handleRemoveExpense())
+                .setNegativeButton(R.string.no, (dialog, which) -> { // no-op
+                }).create().show();
     }
 }

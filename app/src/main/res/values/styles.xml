@@ -25,4 +25,12 @@
         <item name="android:elevation">@dimen/toolbar_elevation</item>
         <item name="titleTextColor">@color/white</item>
     </style>
+
+    <style name="ChooserEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:focusable">false</item>
+        <item name="android:longClickable">false</item>
+        <item name="android:drawableEnd">@drawable/arrow_drop_down</item>
+    </style>
 </resources>

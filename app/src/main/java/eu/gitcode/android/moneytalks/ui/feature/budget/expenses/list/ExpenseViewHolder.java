@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.models.ui.Expense;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseViewHolder;
@@ -25,22 +26,35 @@ public class ExpenseViewHolder extends BaseViewHolder<Expense> {
 
     private Expense expense;
 
-    public ExpenseViewHolder(ViewGroup parent) {
+    private ExpenseViewHolderListener listener;
+
+    public ExpenseViewHolder(ViewGroup parent, ExpenseViewHolderListener listener) {
         super(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.expense_view_holder, parent, false));
+        this.listener = listener;
     }
 
     @OnClick(R.id.card_view)
-    void onCardClicked() {
+    void onCardClick() {
         ExpenseActivity.startActivity(itemView.getContext(), expense);
+    }
+
+    @OnLongClick(R.id.card_view)
+    boolean onCardLongClick() {
+        listener.onExpenseLongClicked(expense);
+        return true;
     }
 
     @Override
     public void bind(Expense item) {
-
         this.expense = item;
         nameTxt.setText(item.title());
         spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), item.cost()));
         dateTxt.setText(DateUtils.getShortDateStringFromDateTime(item.date()));
     }
+
+    public interface ExpenseViewHolderListener {
+        void onExpenseLongClicked(Expense expense);
+    }
+
 }

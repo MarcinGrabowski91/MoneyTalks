@@ -2,6 +2,7 @@ package eu.gitcode.android.moneytalks.dagger.modules;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import javax.inject.Singleton;
 
@@ -37,5 +38,11 @@ public class AppModule {
     public SharedPreferences provideSharedPreferences(App app) {
         return app.getApplicationContext().
                 getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    }
+
+    @Singleton
+    @Provides
+    public Resources provideResources(Context context) {
+        return context.getResources();
     }
 }
