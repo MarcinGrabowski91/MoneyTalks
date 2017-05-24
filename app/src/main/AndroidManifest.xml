@@ -34,5 +34,8 @@
         <activity
             android:name=".ui.feature.budget.expenses.show.ExpenseActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.feature.budget.expenses.addedit.AddEditExpenseActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

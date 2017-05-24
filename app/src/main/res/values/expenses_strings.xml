@@ -4,4 +4,6 @@
     <string name="date">Date</string>
     <string name="cost">Cost</string>
     <string name="description">Description</string>
+    <string name="new_expense">New expense</string>
+    <string name="remove_expense">Do you want to remove this expense?</string>
 </resources>

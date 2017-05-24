@@ -3,6 +3,7 @@ package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.list;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +18,11 @@ import java.util.List;
 import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
+import eu.gitcode.android.moneytalks.enumeration.ItemActionChooserEnum;
 import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.models.ui.Expense;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseActivity;
 
 public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
         ExpensesContract.Presenter> implements ExpensesContract.View {
@@ -73,9 +76,35 @@ public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
         adapter.setExpenses(expensesList);
     }
 
+    @Override
+    public void showRemoveSuccessView() {
+        getPresenter().handleBudgetData();
+    }
+
     private void setupRecyclerView() {
-        adapter = new ExpensesAdapter();
+        ExpenseViewHolder.ExpenseViewHolderListener listener = expense ->
+                new AlertDialog.Builder(getContext())
+                        .setItems(ItemActionChooserEnum.getNamesResArray(getResources()),
+                                (dialog, which) -> {
+                                    if (ItemActionChooserEnum.values()[which]
+                                            .equals(ItemActionChooserEnum.EDIT)) {
+                                        AddEditExpenseActivity.startActivityForResult(this, expense);
+                                    } else if (ItemActionChooserEnum.values()[which]
+                                            .equals(ItemActionChooserEnum.REMOVE)) {
+                                        showRemoveExpenseDialog(expense);
+                                    }
+                                }).show();
+        adapter = new ExpensesAdapter(listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    private void showRemoveExpenseDialog(Expense expense) {
+        new AlertDialog.Builder(getContext())
+                .setMessage(R.string.remove_expense)
+                .setPositiveButton(R.string.yes, (dialog, which) ->
+                        getPresenter().handleRemoveExpense(expense))
+                .setNegativeButton(R.string.no, (dialog, which) -> { // no-op
+                }).create().show();
     }
 }

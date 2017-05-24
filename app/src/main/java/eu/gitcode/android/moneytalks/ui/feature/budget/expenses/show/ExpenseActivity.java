@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.BindView;
@@ -37,19 +38,37 @@ public class ExpenseActivity extends BaseActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_toolbar_menu, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        ExpenseFragment expenseFragment =
+                (ExpenseFragment) getSupportFragmentManager()
+                        .findFragmentByTag(ExpenseFragment.TAG);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.edit_menu_btn:
+                if (expenseFragment != null) {
+                    expenseFragment.handleEditExpense();
+                }
+                break;
+            case R.id.remove_menu_btn:
+                if (expenseFragment != null) {
+                    expenseFragment.handleRemoveExpense();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void setUpToolbar() {
-        if (getIntent().hasExtra(EXPENSE)) {
-            Expense expense = getIntent().getParcelableExtra(EXPENSE);
-            toolbar.setTitle(expense.title());
-        }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

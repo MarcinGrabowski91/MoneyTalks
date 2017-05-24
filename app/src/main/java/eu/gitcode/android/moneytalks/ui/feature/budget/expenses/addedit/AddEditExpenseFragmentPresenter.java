@@ -1,4 +1,4 @@
-package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show;
+package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit;
 
 import javax.inject.Inject;
 
@@ -9,8 +9,8 @@ import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
 import rx.subscriptions.CompositeSubscription;
 
 @FragmentScope
-public final class ExpenseFragmentPresenter extends MvpBasePresenterRest<ExpenseContract.View>
-        implements ExpenseContract.Presenter {
+public final class AddEditExpenseFragmentPresenter extends MvpBasePresenterRest<AddEditExpenseContract.View>
+        implements AddEditExpenseContract.Presenter {
 
     private final PreferenceController preferenceController;
 
@@ -19,7 +19,7 @@ public final class ExpenseFragmentPresenter extends MvpBasePresenterRest<Expense
     private Expense expense;
 
     @Inject
-    public ExpenseFragmentPresenter(PreferenceController preferenceController) {
+    public AddEditExpenseFragmentPresenter(PreferenceController preferenceController) {
         this.preferenceController = preferenceController;
     }
 
@@ -36,12 +36,7 @@ public final class ExpenseFragmentPresenter extends MvpBasePresenterRest<Expense
     }
 
     @Override
-    public void handleRemoveExpense() {
-        getView().showRemoveSuccessView();
-    }
-
-    @Override
-    public Expense getExpense() {
-        return expense;
+    public void addOrUpdateExpense() {
+        getView().showAddOrUpdateSuccessView();
     }
 }
