@@ -44,4 +44,9 @@ public class DateUtils {
         DateTime currentDateTime = new DateTime(DateTimeZone.UTC);
         return dateTime.isBefore(currentDateTime);
     }
+
+    public static String getRelativeDate(DateTime dateTime) {
+        return android.text.format.DateUtils.getRelativeTimeSpanString(dateTime.getMillis(),
+                DateTime.now().getMillis(), android.text.format.DateUtils.DAY_IN_MILLIS).toString();
+    }
 }

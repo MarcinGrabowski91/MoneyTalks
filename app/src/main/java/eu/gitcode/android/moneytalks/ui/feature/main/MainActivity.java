@@ -20,6 +20,7 @@ import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpActivity;
 import eu.gitcode.android.moneytalks.ui.feature.budget.summary.BudgetSummaryFragment;
 import eu.gitcode.android.moneytalks.ui.feature.login.LoginActivity;
 import eu.gitcode.android.moneytalks.ui.feature.notes.list.NotesFragment;
+import eu.gitcode.android.moneytalks.ui.feature.notifications.NotificationsFragment;
 import eu.gitcode.android.moneytalks.ui.feature.summary.SummaryFragment;
 
 public class MainActivity extends BaseMvpActivity<MainActivityContract.View,
@@ -114,6 +115,8 @@ public class MainActivity extends BaseMvpActivity<MainActivityContract.View,
                     break;
                 case R.id.notifications_item:
                     toolbar.setTitle(R.string.notifications);
+                    replaceFragment(R.id.fragment_container, new NotificationsFragment(),
+                            NotificationsFragment.TAG).commit();
                     break;
                 case R.id.reminders_item:
                     toolbar.setTitle(R.string.reminders);
