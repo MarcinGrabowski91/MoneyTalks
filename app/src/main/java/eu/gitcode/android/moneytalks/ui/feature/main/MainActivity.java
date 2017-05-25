@@ -19,6 +19,7 @@ import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpActivity;
 import eu.gitcode.android.moneytalks.ui.feature.budget.summary.BudgetSummaryFragment;
 import eu.gitcode.android.moneytalks.ui.feature.login.LoginActivity;
+import eu.gitcode.android.moneytalks.ui.feature.notes.list.NotesFragment;
 import eu.gitcode.android.moneytalks.ui.feature.summary.SummaryFragment;
 
 public class MainActivity extends BaseMvpActivity<MainActivityContract.View,
@@ -119,6 +120,8 @@ public class MainActivity extends BaseMvpActivity<MainActivityContract.View,
                     break;
                 case R.id.notes_item:
                     toolbar.setTitle(R.string.notes);
+                    replaceFragment(R.id.fragment_container, new NotesFragment(),
+                            NotesFragment.TAG).commit();
                     break;
                 case R.id.logout_item:
                     logout();

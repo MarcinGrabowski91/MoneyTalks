@@ -13,6 +13,8 @@ public final class NetworkUtils {
         throw new AssertionError();
     }
 
+    public static final String unknownError = "Unknown error";
+
     public static String getExceptionText(Throwable throwable) {
         if (throwable != null) {
             if (throwable instanceof HttpException) {
@@ -23,10 +25,10 @@ public final class NetworkUtils {
             } else if (throwable instanceof UnknownHostException) {
                 return "Can not connect to the server";
             } else {
-                return "Unknown error";
+                return unknownError;
             }
         } else {
-            return "Unknown error";
+            return unknownError;
         }
     }
 
@@ -47,7 +49,7 @@ public final class NetworkUtils {
             case 504:
                 return "HTTP Error 504: Gateway timeout";
             default:
-                return "Unknown error";
+                return unknownError;
         }
     }
 

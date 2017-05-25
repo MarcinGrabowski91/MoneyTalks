@@ -1,7 +1,5 @@
 package eu.gitcode.android.moneytalks.dagger.components;
 
-import android.content.res.Resources;
-
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -22,8 +20,6 @@ public interface AppComponent {
     AuthController authController();
 
     DebugMetricsHelper debugMetricsHelper();
-
-    Resources resources();
 
     void inject(App app);
 }

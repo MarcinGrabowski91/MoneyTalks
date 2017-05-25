@@ -1,4 +1,4 @@
-package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show;
+package eu.gitcode.android.moneytalks.ui.feature.notes.show;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,19 +9,19 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Note;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
 
-public class ExpenseActivity extends BaseActivity {
+public class NoteActivity extends BaseActivity {
 
-    public static final String EXPENSE = "NOTE";
+    public static final String NOTE = "NOTE";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    public static void startActivity(Context context, Expense expense) {
-        Intent intent = new Intent(context, ExpenseActivity.class);
-        intent.putExtra(EXPENSE, expense);
+    public static void startActivity(Context context, Note note) {
+        Intent intent = new Intent(context, NoteActivity.class);
+        intent.putExtra(NOTE, note);
         context.startActivity(intent);
     }
 
@@ -29,14 +29,13 @@ public class ExpenseActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity_layout);
-
-        if (savedInstanceState == null && getIntent().hasExtra(EXPENSE)) {
-            Expense expense = getIntent().getParcelableExtra(EXPENSE);
-            setUpToolbar(expense.title());
-            replaceFragment(R.id.fragment_container, ExpenseFragment.newInstance(expense),
-                    ExpenseFragment.TAG).commit();
+        if (savedInstanceState == null && getIntent().hasExtra(NOTE)) {
+            Note note = getIntent().getParcelableExtra(NOTE);
+            setUpToolbar(note.title());
+            replaceFragment(R.id.fragment_container, NoteFragment.newInstance(note),
+                    NoteFragment.TAG).commit();
         } else {
-            setUpToolbar(getString(R.string.new_expense));
+            setUpToolbar(getString(R.string.new_note));
         }
     }
 
@@ -49,25 +48,26 @@ public class ExpenseActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        ExpenseFragment expenseFragment =
-                (ExpenseFragment) getSupportFragmentManager()
-                        .findFragmentByTag(ExpenseFragment.TAG);
+        NoteFragment noteFragment =
+                (NoteFragment) getSupportFragmentManager()
+                        .findFragmentByTag(NoteFragment.TAG);
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
             case R.id.edit_menu_btn:
-                if (expenseFragment != null) {
-                    expenseFragment.handleEditExpense();
+                if (noteFragment != null) {
+                    noteFragment.handleEditNote();
                 }
                 break;
             case R.id.remove_menu_btn:
-                if (expenseFragment != null) {
-                    expenseFragment.handleRemoveExpense();
+                if (noteFragment != null) {
+                    noteFragment.handleRemoveNote();
                 }
                 break;
             default:
-                // no-op
+                //no-op
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

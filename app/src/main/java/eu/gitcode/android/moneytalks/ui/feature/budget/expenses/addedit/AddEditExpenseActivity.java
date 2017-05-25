@@ -1,6 +1,5 @@
 package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,7 @@ import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
 
 public class AddEditExpenseActivity extends BaseActivity {
 
-    public static final String EXPENSE = "EXPENSE";
+    public static final String EXPENSE = "NOTE";
 
     public static final int ADD_EDIT_EXPENSE_REQUEST_CODE = 1;
 
@@ -28,9 +27,9 @@ public class AddEditExpenseActivity extends BaseActivity {
         fragment.startActivityForResult(intent, ADD_EDIT_EXPENSE_REQUEST_CODE);
     }
 
-    public static void startActivity(Context context) {
-        Intent intent = new Intent(context, AddEditExpenseActivity.class);
-        context.startActivity(intent);
+    public static void startActivityForResult(Fragment fragment) {
+        Intent intent = new Intent(fragment.getContext(), AddEditExpenseActivity.class);
+        fragment.startActivityForResult(intent, ADD_EDIT_EXPENSE_REQUEST_CODE);
     }
 
     @Override

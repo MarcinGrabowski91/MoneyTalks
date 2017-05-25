@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:colorPrimary">@color/primary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
@@ -32,5 +33,11 @@
         <item name="android:focusable">false</item>
         <item name="android:longClickable">false</item>
         <item name="android:drawableEnd">@drawable/arrow_drop_down</item>
+    </style>
+
+    <style name="FormInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/secondary_text</item>
     </style>
 </resources>

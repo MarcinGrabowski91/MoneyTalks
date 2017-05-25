@@ -7,10 +7,12 @@ import butterknife.ButterKnife;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
+
     public BaseViewHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
     }
 
-    abstract public void bind(T item);
+    public abstract void bind(T item);
+
 }
