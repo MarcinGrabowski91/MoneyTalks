@@ -19,6 +19,8 @@ import eu.gitcode.android.moneytalks.ui.feature.main.MainComponent;
 import eu.gitcode.android.moneytalks.ui.feature.notes.addedit.AddEditNoteComponent;
 import eu.gitcode.android.moneytalks.ui.feature.notes.list.NotesComponent;
 import eu.gitcode.android.moneytalks.ui.feature.notes.show.NoteComponent;
+import eu.gitcode.android.moneytalks.ui.feature.notifications.logs.LogsComponent;
+import eu.gitcode.android.moneytalks.ui.feature.notifications.messages.MessagesComponent;
 import eu.gitcode.android.moneytalks.ui.feature.register.RegisterComponent;
 import eu.gitcode.android.moneytalks.ui.feature.summary.SummaryComponent;
 
@@ -59,6 +61,10 @@ public interface ApplicationComponent {
     CategoriesComponent getCategoriesComponent();
 
     SubcategoriesComponent getSubcategoriesComponent();
+
+    MessagesComponent getMessagesComponent();
+
+    LogsComponent getLogsComponent();
 
     void inject(App app);
 }
