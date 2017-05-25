@@ -1,23 +1,23 @@
-package eu.gitcode.android.moneytalks.ui.feature.budget.categories.list;
+package eu.gitcode.android.moneytalks.ui.feature.budget.subcategories;
 
 import javax.inject.Inject;
 
 import eu.gitcode.android.moneytalks.controllers.PreferenceController;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;
-import eu.gitcode.android.moneytalks.models.ui.Category;
+import eu.gitcode.android.moneytalks.models.ui.Subcategory;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
 import rx.subscriptions.CompositeSubscription;
 
 @FragmentScope
-public final class CategoriesFragmentPresenter extends MvpBasePresenterRest<CategoriesContract.View>
-        implements CategoriesContract.Presenter {
+public final class SubcategoriesFragmentPresenter extends MvpBasePresenterRest<SubcategoriesContract.View>
+        implements SubcategoriesContract.Presenter {
 
     private final PreferenceController preferenceController;
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Inject
-    public CategoriesFragmentPresenter(PreferenceController preferenceController) {
+    public SubcategoriesFragmentPresenter(PreferenceController preferenceController) {
         this.preferenceController = preferenceController;
     }
 
@@ -29,21 +29,21 @@ public final class CategoriesFragmentPresenter extends MvpBasePresenterRest<Cate
 
     @Override
     public void handleCategoriesData() {
-        getView().showCategoriesData();
+        getView().showSubcategoriesData();
     }
 
     @Override
-    public void handleRemoveCategory(Category category) {
+    public void handleRemoveSubcategory(Subcategory subcategory) {
         getView().showRemoveSuccessView();
     }
 
     @Override
-    public void handleAddCategory(String title) {
-        getView().showCategoriesData();
+    public void handleAddSubcategory(String title) {
+        getView().showSubcategoriesData();
     }
 
     @Override
-    public void handleUpdateCategory(Category category) {
-        getView().showCategoriesData();
+    public void handleUpdateSubcategory(Subcategory subcategory) {
+        getView().showSubcategoriesData();
     }
 }

@@ -1,4 +1,4 @@
-package eu.gitcode.android.moneytalks.ui.feature.budget.categories.list;
+package eu.gitcode.android.moneytalks.ui.feature.budget.categories;
 
 import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpPresenterRest;

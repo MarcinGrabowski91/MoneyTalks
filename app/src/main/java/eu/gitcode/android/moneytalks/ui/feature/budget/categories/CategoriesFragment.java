@@ -1,4 +1,4 @@
-package eu.gitcode.android.moneytalks.ui.feature.budget.categories.list;
+package eu.gitcode.android.moneytalks.ui.feature.budget.categories;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +22,9 @@ import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.enumeration.ItemActionChooserEnum;
 import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity;
+import onactivityresult.ActivityResult;
+import onactivityresult.OnActivityResult;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -64,6 +67,20 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
         return component.getCategoriesFragmentPresenter();
     }
 
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ActivityResult.onResult(requestCode, resultCode, data).into(this);
+    }
+
+    @OnActivityResult(requestCode = CategoriesActivity.SUBCATEGORY_REQUEST)
+    void onActivityResultRegisterSuccess(final int resultCode, Intent data) {
+        if (RESULT_OK == resultCode && data.hasExtra(SubcategoriesActivity.SUBCATEGORY)) {
+            getActivity().setResult(RESULT_OK, data);
+            getActivity().finish();
+        }
+    }
+
     @OnClick(R.id.floating_btn)
     void onFloatingBtnClick() {
         final EditText titleEdit = new EditText(getContext());
@@ -72,9 +89,8 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
                 .setTitle(R.string.title)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) ->
                         getPresenter().handleAddCategory(titleEdit.getText().toString()))
-                .setNegativeButton(R.string.cancel, (dialog, whichButton) -> {
-                })
-                .show();
+                .setNegativeButton(R.string.cancel, (dialog, whichButton) -> { // no-op
+                }).show();
     }
 
     @Override
@@ -86,10 +102,11 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
     public void showCategoriesData() {
         //TODO load categories data from the server
         List<Category> categoriesList = new ArrayList<>();
-        categoriesList.add(Category.builder().name("Clothes").build());
-        categoriesList.add(Category.builder().name("Electronics").build());
-        categoriesList.add(Category.builder().name("Car").build());
-        categoriesList.add(Category.builder().name("House").build());
+        categoriesList.add(Category.builder().name("Kategoria 1").build());
+        categoriesList.add(Category.builder().name("Kategoria 2").build());
+        categoriesList.add(Category.builder().name("Kategoria 3").build());
+        categoriesList.add(Category.builder().name("Kategoria 4").build());
+        categoriesList.add(Category.builder().name("Kategoria 5").build());
         adapter.setCategories(categoriesList);
     }
 
@@ -99,8 +116,8 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
     }
 
     private void setupRecyclerView() {
-        CategoriesViewHolder.ExpenseViewHolderListener listener
-                = new CategoriesViewHolder.ExpenseViewHolderListener() {
+        CategoryViewHolder.CategoryViewHolderListener listener
+                = new CategoryViewHolder.CategoryViewHolderListener() {
             @Override
             public void onCategoryLongClicked(Category category) {
                 new AlertDialog.Builder(getContext())
@@ -118,16 +135,17 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
 
             @Override
             public void onCategoryClicked(Category category) {
-                Intent intent = new Intent();
-                intent.putExtra(CategoriesActivity.CATEGORY, category);
-                getActivity().setResult(RESULT_OK, intent);
-                getActivity().finish();
+                startSubcategoryActivity(category);
             }
         };
 
         adapter = new CategoriesAdapter(listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    private void startSubcategoryActivity(Category category) {
+        SubcategoriesActivity.startActivityForResult(this, category);
     }
 
     private void showUpdateCategoryDialog(Category category) {
@@ -139,10 +157,8 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
                 .setPositiveButton(R.string.ok,
                         (titleDialog, whichButton) ->
                                 getPresenter().handleUpdateCategory(category))
-                .setNegativeButton(R.string.cancel,
-                        (titleDialog, whichButton) -> {
-                        })
-                .show();
+                .setNegativeButton(R.string.cancel, (titleDialog, whichButton) -> { // no-op
+                }).show();
     }
 
     private void showRemoveCategoryDialog(Category category) {
