@@ -17,10 +17,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
-import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Subcategory;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
-import eu.gitcode.android.moneytalks.ui.feature.budget.categories.list.CategoriesActivity;
+import eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity;
+import eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
 import onactivityresult.ActivityResult;
 import onactivityresult.OnActivityResult;
@@ -128,11 +129,11 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
         ActivityResult.onResult(requestCode, resultCode, data).into(this);
     }
 
-    @OnActivityResult(requestCode = CategoriesActivity.CATEGORY_REQUEST)
+    @OnActivityResult(requestCode = CategoriesActivity.SUBCATEGORY_REQUEST)
     void onActivityResultRegisterSuccess(final int resultCode, Intent data) {
-        if (RESULT_OK == resultCode && data.hasExtra(CategoriesActivity.CATEGORY)) {
-            Category category = data.getParcelableExtra(CategoriesActivity.CATEGORY);
-            categoryEdit.setText(category.name());
+        if (RESULT_OK == resultCode && data.hasExtra(SubcategoriesActivity.SUBCATEGORY)) {
+            Subcategory subcategory = data.getParcelableExtra(SubcategoriesActivity.SUBCATEGORY);
+            categoryEdit.setText(subcategory.name());
         }
     }
 

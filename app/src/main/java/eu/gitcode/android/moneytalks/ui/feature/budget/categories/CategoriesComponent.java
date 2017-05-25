@@ -1,4 +1,4 @@
-package eu.gitcode.android.moneytalks.ui.feature.budget.categories.list;
+package eu.gitcode.android.moneytalks.ui.feature.budget.categories;
 
 import dagger.Subcomponent;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;

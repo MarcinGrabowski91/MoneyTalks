@@ -44,7 +44,10 @@
             android:name=".ui.feature.notes.addedit.AddEditNoteActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.feature.budget.categories.list.CategoriesActivity"
+            android:name=".ui.feature.budget.categories.CategoriesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.feature.budget.subcategories.SubcategoriesActivity"
             android:screenOrientation="portrait" />
     </application>
 </manifest>

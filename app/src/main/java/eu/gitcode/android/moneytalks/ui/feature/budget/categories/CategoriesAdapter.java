@@ -1,4 +1,4 @@
-package eu.gitcode.android.moneytalks.ui.feature.budget.categories.list;
+package eu.gitcode.android.moneytalks.ui.feature.budget.categories;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -8,23 +8,23 @@ import java.util.List;
 
 import eu.gitcode.android.moneytalks.models.ui.Category;
 
-public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesViewHolder> {
+public class CategoriesAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
-    private CategoriesViewHolder.ExpenseViewHolderListener listener;
+    private CategoryViewHolder.CategoryViewHolderListener listener;
     private List<Category> categoriesList = new ArrayList<>();
 
-    public CategoriesAdapter(CategoriesViewHolder.ExpenseViewHolderListener listener) {
+    public CategoriesAdapter(CategoryViewHolder.CategoryViewHolderListener listener) {
         this.listener = listener;
     }
 
     @Override
-    public CategoriesViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        return new CategoriesViewHolder(parent, listener);
+    public CategoryViewHolder onCreateViewHolder(ViewGroup parent,
+                                                 int viewType) {
+        return new CategoryViewHolder(parent, listener);
     }
 
     @Override
-    public void onBindViewHolder(CategoriesViewHolder holder, int position) {
+    public void onBindViewHolder(CategoryViewHolder holder, int position) {
         Category category = categoriesList.get(position);
         holder.bind(category);
     }

@@ -9,11 +9,11 @@ import retrofit2.adapter.rxjava.HttpException;
 
 public final class NetworkUtils {
 
+    public static final String unknownError = "Unknown error";
+
     private NetworkUtils() {
         throw new AssertionError();
     }
-
-    public static final String unknownError = "Unknown error";
 
     public static String getExceptionText(Throwable throwable) {
         if (throwable != null) {
