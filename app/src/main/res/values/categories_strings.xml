@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="category">Category</string>
+    <string name="remove_category">Do you want to remove this category?</string>
 </resources>

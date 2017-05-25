@@ -29,8 +29,8 @@ public final class StringUtils {
                         "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
                         ")+"
         );
-        email = email.trim();
-        return emailAddressPattern.matcher(email).matches();
+        String trimmedEmail = email.trim();
+        return emailAddressPattern.matcher(trimmedEmail).matches();
     }
 
     public static boolean isAnyStringEquals(String baseString, String... strings) {
@@ -39,7 +39,6 @@ public final class StringUtils {
         }
         return false;
     }
-
     public static Float stringToFloat(String value) {
         return StringUtils.isNullOrEmpty(value) ? null : Float.parseFloat(value);
     }

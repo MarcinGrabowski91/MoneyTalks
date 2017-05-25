@@ -24,6 +24,7 @@ import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
 
 public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract.View,
@@ -63,6 +64,12 @@ public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract
         showCurrentDate();
         setupRecyclerView();
         getPresenter().handleBudgetData();
+    }
+
+
+    @OnClick(R.id.floating_btn)
+    void onFloatingBtnClick() {
+        AddEditExpenseActivity.startActivityForResult(this);
     }
 
     @OnClick(R.id.date_txt)

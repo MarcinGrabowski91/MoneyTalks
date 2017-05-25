@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.enumeration.ItemActionChooserEnum;
@@ -52,6 +53,11 @@ public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
         ExpensesComponent component = App.getAppComponent(getContext()).getExpensesComponent();
         component.inject(this);
         return component.getExpensesPresenter();
+    }
+
+    @OnClick(R.id.floating_btn)
+    void onFloatingBtnClick() {
+        AddEditExpenseActivity.startActivityForResult(this);
     }
 
     @Override

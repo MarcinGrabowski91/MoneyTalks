@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="notes">Notes</string>
+    <string name="remove_note">Do you want to remove this note?</string>
+    <string name="new_note">New note</string>
+    <string name="content">Content</string>
 </resources>

@@ -10,7 +10,7 @@ import eu.gitcode.android.moneytalks.models.ui.Expense;
 
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpenseViewHolder> {
 
-    ExpenseViewHolder.ExpenseViewHolderListener listener;
+    private ExpenseViewHolder.ExpenseViewHolderListener listener;
     private List<Expense> expensesList = new ArrayList<>();
 
     public ExpensesAdapter(ExpenseViewHolder.ExpenseViewHolderListener listener) {
