@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,6 +26,7 @@ import onactivityresult.ActivityResult;
 import onactivityresult.OnActivityResult;
 
 import static android.app.Activity.RESULT_OK;
+import static eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity.SUBCATEGORY;
 
 public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
         CategoriesContract.Presenter> implements CategoriesContract.View {
@@ -56,7 +56,7 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupRecyclerView();
-        getPresenter().handleCategoriesData();
+        getPresenter().loadCategoriesData();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
 
     @OnActivityResult(requestCode = CategoriesActivity.SUBCATEGORY_REQUEST)
     void onActivityResultRegisterSuccess(final int resultCode, Intent data) {
-        if (RESULT_OK == resultCode && data.hasExtra(SubcategoriesActivity.SUBCATEGORY)) {
+        if (RESULT_OK == resultCode && data.hasExtra(SUBCATEGORY)) {
             getActivity().setResult(RESULT_OK, data);
             getActivity().finish();
         }
@@ -99,20 +99,13 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
     }
 
     @Override
-    public void showCategoriesData() {
-        //TODO load categories data from the server
-        List<Category> categoriesList = new ArrayList<>();
-        categoriesList.add(Category.builder().name("Kategoria 1").build());
-        categoriesList.add(Category.builder().name("Kategoria 2").build());
-        categoriesList.add(Category.builder().name("Kategoria 3").build());
-        categoriesList.add(Category.builder().name("Kategoria 4").build());
-        categoriesList.add(Category.builder().name("Kategoria 5").build());
+    public void showCategoriesData(List<Category> categoriesList) {
         adapter.setCategories(categoriesList);
     }
 
     @Override
     public void showRemoveSuccessView() {
-        getPresenter().handleCategoriesData();
+        getPresenter().loadCategoriesData();
     }
 
     private void setupRecyclerView() {
@@ -145,7 +138,7 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
     }
 
     private void startSubcategoryActivity(Category category) {
-        SubcategoriesActivity.startActivityForResult(this, category);
+        SubcategoriesActivity.startActivityForResult(this, category.id());
     }
 
     private void showUpdateCategoryDialog(Category category) {

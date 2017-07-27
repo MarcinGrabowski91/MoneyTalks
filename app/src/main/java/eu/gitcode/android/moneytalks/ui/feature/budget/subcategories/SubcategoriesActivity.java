@@ -8,21 +8,19 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
-import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
-import eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity;
 
 public class SubcategoriesActivity extends BaseActivity {
 
     public static final int SUBCATEGORY_REQUEST = 1;
-    public static final String SUBCATEGORY = "CATEGORY";
+    public static final String CATEGORY_ID = "category_id";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    public static void startActivityForResult(Fragment fragment, Category category) {
+    public static void startActivityForResult(Fragment fragment, Long categoryId) {
         Intent intent = new Intent(fragment.getContext(), SubcategoriesActivity.class);
-        intent.putExtra(SUBCATEGORY, category);
+        intent.putExtra(CATEGORY_ID, categoryId);
         fragment.startActivityForResult(intent, SUBCATEGORY_REQUEST);
     }
 
@@ -32,10 +30,10 @@ public class SubcategoriesActivity extends BaseActivity {
         setContentView(R.layout.base_activity_layout);
         setUpToolbar();
         if (savedInstanceState == null) {
-            if (getIntent().hasExtra(CategoriesActivity.CATEGORY)) {
-                Category category = getIntent().getParcelableExtra(CategoriesActivity.CATEGORY);
+            if (getIntent().hasExtra(CATEGORY_ID)) {
+                Long categoryId = getIntent().getLongExtra(CATEGORY_ID, 0L);
                 replaceFragment(R.id.fragment_container,
-                        SubcategoriesFragment.newInstance(category), SubcategoriesFragment.TAG)
+                        SubcategoriesFragment.newInstance(categoryId), SubcategoriesFragment.TAG)
                         .commit();
             } else {
                 replaceFragment(R.id.fragment_container, new SubcategoriesFragment(),

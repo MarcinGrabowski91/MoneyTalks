@@ -2,6 +2,7 @@ package eu.gitcode.android.moneytalks.api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
 
 import org.joda.time.DateTime;
 
@@ -44,7 +45,7 @@ public class ApiModule {
     @Provides
     public Gson provideGson() {
         return new GsonBuilder()
-                .registerTypeAdapterFactory(GsonAdapterFactory.create())
+                .registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
                 .registerTypeAdapter(DateTime.class, new DateTimeConverter())
                 .create();
     }
@@ -84,5 +85,11 @@ public class ApiModule {
     @Provides
     AuthApi provideLoginApi(@Named("NoAuthRetrofit") Retrofit retrofit) {
         return retrofit.create(AuthApi.class);
+    }
+
+    @Singleton
+    @Provides
+    BudgetApi provideBudgetApi(Retrofit retrofit) {
+        return retrofit.create(BudgetApi.class);
     }
 }

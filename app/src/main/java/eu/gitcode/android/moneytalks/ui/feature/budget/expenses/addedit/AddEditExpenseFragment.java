@@ -21,12 +21,12 @@ import eu.gitcode.android.moneytalks.models.ui.Expense;
 import eu.gitcode.android.moneytalks.models.ui.Subcategory;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 import eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity;
-import eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
 import onactivityresult.ActivityResult;
 import onactivityresult.OnActivityResult;
 
 import static android.app.Activity.RESULT_OK;
+import static eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity.SUBCATEGORY;
 
 public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContract.View,
         AddEditExpenseContract.Presenter> implements AddEditExpenseContract.View,
@@ -91,7 +91,7 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
 
     @OnClick(R.id.category_edit)
     void onCategoryClick() {
-        CategoriesActivity.startActivityForResult(this, null);
+        CategoriesActivity.startActivityForResult(this);
     }
 
     @Override
@@ -131,8 +131,8 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
 
     @OnActivityResult(requestCode = CategoriesActivity.SUBCATEGORY_REQUEST)
     void onActivityResultRegisterSuccess(final int resultCode, Intent data) {
-        if (RESULT_OK == resultCode && data.hasExtra(SubcategoriesActivity.SUBCATEGORY)) {
-            Subcategory subcategory = data.getParcelableExtra(SubcategoriesActivity.SUBCATEGORY);
+        if (RESULT_OK == resultCode && data.hasExtra(SUBCATEGORY)) {
+            Subcategory subcategory = data.getParcelableExtra(SUBCATEGORY);
             categoryEdit.setText(subcategory.name());
         }
     }
@@ -147,6 +147,4 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
                 dateTime.getDayOfMonth());
         datePickerDialog.show();
     }
-
-
 }

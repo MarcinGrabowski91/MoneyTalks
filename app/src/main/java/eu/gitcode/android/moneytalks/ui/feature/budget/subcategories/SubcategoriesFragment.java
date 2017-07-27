@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -20,11 +19,12 @@ import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.enumeration.ItemActionChooserEnum;
-import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.models.ui.Subcategory;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 
 import static android.app.Activity.RESULT_OK;
+import static eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity.SUBCATEGORY;
+import static eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity.CATEGORY_ID;
 
 public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract.View,
         SubcategoriesContract.Presenter> implements SubcategoriesContract.View {
@@ -35,10 +35,10 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
 
     SubcategoriesAdapter adapter;
 
-    public static SubcategoriesFragment newInstance(Category category) {
+    public static SubcategoriesFragment newInstance(Long id) {
         SubcategoriesFragment subcategoriesFragment = new SubcategoriesFragment();
         Bundle args = new Bundle();
-        args.putParcelable(SubcategoriesActivity.SUBCATEGORY, category);
+        args.putLong(CATEGORY_ID, id);
         subcategoriesFragment.setArguments(args);
 
         return subcategoriesFragment;
@@ -53,8 +53,11 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            getPresenter().saveCategoryId(getArguments().getLong(CATEGORY_ID));
+        }
         setupRecyclerView();
-        getPresenter().handleCategoriesData();
+        getPresenter().loadSubcategories();
     }
 
     @Override
@@ -84,19 +87,13 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
     }
 
     @Override
-    public void showSubcategoriesData() {
-        //TODO load categories data from the server
-        List<Subcategory> subcategoriesList = new ArrayList<>();
-        subcategoriesList.add(Subcategory.builder().name("Subkategoria 1").build());
-        subcategoriesList.add(Subcategory.builder().name("Subkategoria 2").build());
-        subcategoriesList.add(Subcategory.builder().name("Subkategoria 3").build());
-        subcategoriesList.add(Subcategory.builder().name("Subkategoria 4").build());
+    public void showSubcategoriesList(List<Subcategory> subcategoriesList) {
         adapter.setSubcategories(subcategoriesList);
     }
 
     @Override
     public void showRemoveSuccessView() {
-        getPresenter().handleCategoriesData();
+        getPresenter().loadSubcategories();
     }
 
     private void setupRecyclerView() {
@@ -120,7 +117,7 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
             @Override
             public void onSubcategoryClicked(Subcategory subcategory) {
                 Intent intent = new Intent();
-                intent.putExtra(SubcategoriesActivity.SUBCATEGORY, subcategory);
+                intent.putExtra(SUBCATEGORY, subcategory);
                 getActivity().setResult(RESULT_OK, intent);
                 getActivity().finish();
             }

@@ -8,20 +8,19 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
-import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
 
 public class CategoriesActivity extends BaseActivity {
 
     public static final int SUBCATEGORY_REQUEST = 1;
-    public static final String CATEGORY = "CATEGORY";
+    public static final String CATEGORY = "category";
+    public static final String SUBCATEGORY = "subcategory";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    public static void startActivityForResult(Fragment fragment, Category category) {
+    public static void startActivityForResult(Fragment fragment) {
         Intent intent = new Intent(fragment.getContext(), CategoriesActivity.class);
-        intent.putExtra(CATEGORY, category);
         fragment.startActivityForResult(intent, SUBCATEGORY_REQUEST);
     }
 
@@ -31,14 +30,8 @@ public class CategoriesActivity extends BaseActivity {
         setContentView(R.layout.base_activity_layout);
         setUpToolbar();
         if (savedInstanceState == null) {
-            if (getIntent().hasExtra(CATEGORY)) {
-                Category category = getIntent().getParcelableExtra(CATEGORY);
-                replaceFragment(R.id.fragment_container,
-                        CategoriesFragment.newInstance(category), CategoriesFragment.TAG).commit();
-            } else {
-                replaceFragment(R.id.fragment_container, new CategoriesFragment(),
-                        CategoriesFragment.TAG).commit();
-            }
+            replaceFragment(R.id.fragment_container, new CategoriesFragment(),
+                    CategoriesFragment.TAG).commit();
         }
     }
 

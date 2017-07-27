@@ -40,17 +40,14 @@ final class SessionInterceptor implements Interceptor {
     }
 
     private Response handleRequestWithoutToken(Chain chain) throws IOException {
-
         Request request = chain.request();
         return chain.proceed(request);
     }
 
     private Response handleRequestWithToken(Chain chain, TokenRest token) throws IOException {
         Request request = chain.request();
-
         Response response = chain.proceed(
                 getRequestWithAuthorizationHeaders(request, token));
-
         if (NetworkUtils.isUnauthorizedCode(response.code())) {
             Timber.d("User is unauthorized, signing out");
             signOut();
