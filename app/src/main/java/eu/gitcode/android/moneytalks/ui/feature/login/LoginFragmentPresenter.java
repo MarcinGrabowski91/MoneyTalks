@@ -3,11 +3,12 @@ package eu.gitcode.android.moneytalks.ui.feature.login;
 import javax.inject.Inject;
 
 import eu.gitcode.android.moneytalks.controllers.AuthController;
-import eu.gitcode.android.moneytalks.controllers.PreferenceController;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
+import eu.gitcode.android.moneytalks.utils.RxTransformers;
 import eu.gitcode.android.moneytalks.utils.StringUtils;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 @FragmentScope
 public final class LoginFragmentPresenter extends MvpBasePresenterRest<LoginContract.View>
@@ -15,15 +16,11 @@ public final class LoginFragmentPresenter extends MvpBasePresenterRest<LoginCont
 
     private final AuthController authController;
 
-    private final PreferenceController preferenceController;
-
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Inject
-    public LoginFragmentPresenter(AuthController authController,
-                                  PreferenceController preferenceController) {
+    public LoginFragmentPresenter(AuthController authController) {
         this.authController = authController;
-        this.preferenceController = preferenceController;
     }
 
     @Override
@@ -33,12 +30,14 @@ public final class LoginFragmentPresenter extends MvpBasePresenterRest<LoginCont
         } else if (!StringUtils.isEmailValid(email)) {
             getView().emailNotValidError();
         } else {
-            getView().showLoginSuccessfulView();
+            subscriptions.add(authController.login(email, password)
+                    .compose(RxTransformers.applySchedulers())
+                    .subscribe(tokenRest -> getView().showLoginSuccessfulView(),
+                            throwable -> {
+                                Timber.d("Login failed", throwable.getLocalizedMessage());
+                                getView().showWrongCredentialsError();
+                            }));
         }
-    }
-
-    public void clearSharedPreferences() {
-        preferenceController.clearSharedPreferences();
     }
 
     @Override

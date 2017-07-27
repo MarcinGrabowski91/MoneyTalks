@@ -1,4 +1,4 @@
-package eu.gitcode.android.moneytalks.dagger.modules;
+package eu.gitcode.android.moneytalks.application;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import eu.gitcode.android.moneytalks.application.App;
 
 @Module
 public class AppModule {

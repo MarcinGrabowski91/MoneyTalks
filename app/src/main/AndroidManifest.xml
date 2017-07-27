@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="eu.gitcode.android.moneytalks">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="eu.gitcode.android.moneytalks.application.App"
         android:allowBackup="true"

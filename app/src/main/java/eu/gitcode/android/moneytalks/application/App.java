@@ -3,7 +3,8 @@ package eu.gitcode.android.moneytalks.application;
 import android.app.Application;
 import android.content.Context;
 
-import eu.gitcode.android.moneytalks.dagger.modules.AppModule;
+import eu.gitcode.android.moneytalks.BuildConfig;
+import eu.gitcode.android.moneytalks.api.ApiModule;
 
 public class App extends Application {
 
@@ -22,11 +23,10 @@ public class App extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-
-        // init dagger appComponent
         this.appComponent = DaggerApplicationComponent
                 .builder()
                 .appModule(new AppModule(this))
+                .apiModule(new ApiModule(BuildConfig.BASE_URL))
                 .build();
     }
 

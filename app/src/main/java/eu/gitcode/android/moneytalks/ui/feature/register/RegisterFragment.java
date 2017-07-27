@@ -14,7 +14,6 @@ import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
-import eu.gitcode.android.moneytalks.ui.feature.main.MainActivity;
 import eu.gitcode.android.moneytalks.utils.UIUtils;
 import onactivityresult.ActivityResult;
 
@@ -22,14 +21,8 @@ public class RegisterFragment extends BaseMvpFragment<RegisterContract.View, Reg
         implements RegisterContract.View {
     public static final String TAG = RegisterFragment.class.getSimpleName();
 
-    @BindView(R.id.register_btn)
-    Button registerBtn;
-
-    @BindView(R.id.first_name_edit)
-    TextInputEditText firstName;
-
-    @BindView(R.id.last_name_edit)
-    TextInputEditText lastName;
+    @BindView(R.id.username_edit)
+    TextInputEditText usernameEdit;
 
     @BindView(R.id.email_edit)
     TextInputEditText emailEdit;
@@ -39,6 +32,9 @@ public class RegisterFragment extends BaseMvpFragment<RegisterContract.View, Reg
 
     @BindView(R.id.re_password_edit)
     TextInputEditText rePasswordEdit;
+
+    @BindView(R.id.register_btn)
+    Button registerBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,10 +53,10 @@ public class RegisterFragment extends BaseMvpFragment<RegisterContract.View, Reg
     @OnClick(R.id.register_btn)
     void onRegisterBtnClicked() {
         registerBtn.setEnabled(false);
-        UIUtils.hideFieldsError(firstName, lastName, emailEdit, passwordEdit, rePasswordEdit);
-        getPresenter().registerAccount(firstName.getText().toString(),
-                lastName.getText().toString(), emailEdit.getText().toString(),
-                passwordEdit.getText().toString(), rePasswordEdit.getText().toString());
+        UIUtils.hideFieldsError(usernameEdit, emailEdit, passwordEdit, rePasswordEdit);
+        getPresenter().registerAccount(usernameEdit.getText().toString(),
+                emailEdit.getText().toString(), passwordEdit.getText().toString(),
+                rePasswordEdit.getText().toString());
     }
 
     @Override
@@ -71,14 +67,13 @@ public class RegisterFragment extends BaseMvpFragment<RegisterContract.View, Reg
 
     @Override
     public void showDataFillError() {
-        UIUtils.showFillError(getContext(), firstName, lastName, emailEdit, passwordEdit,
+        UIUtils.showFillError(getContext(), usernameEdit, emailEdit, passwordEdit,
                 rePasswordEdit);
         registerBtn.setEnabled(true);
     }
 
     @Override
     public void showRegisterSuccessView() {
-        MainActivity.startActivity(getContext());
         getActivity().finish();
     }
 
@@ -98,10 +93,15 @@ public class RegisterFragment extends BaseMvpFragment<RegisterContract.View, Reg
     }
 
     @Override
-    public void emailNotValidError() {
+    public void showEmailNotValidError() {
         emailEdit.setError(getString(R.string.email_not_valid));
         emailEdit.requestFocus();
         registerBtn.setEnabled(true);
+    }
+
+    @Override
+    public void showRegistrationFailedError() {
+        showSnackbar(R.string.registration_failed);
     }
 
     @Override

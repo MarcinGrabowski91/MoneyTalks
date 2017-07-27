@@ -3,11 +3,12 @@ package eu.gitcode.android.moneytalks.ui.feature.register;
 import javax.inject.Inject;
 
 import eu.gitcode.android.moneytalks.controllers.AuthController;
-import eu.gitcode.android.moneytalks.controllers.PreferenceController;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
+import eu.gitcode.android.moneytalks.utils.RxTransformers;
 import eu.gitcode.android.moneytalks.utils.StringUtils;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 @FragmentScope
 public final class RegisterFragmentPresenter extends MvpBasePresenterRest<RegisterContract.View>
@@ -15,15 +16,11 @@ public final class RegisterFragmentPresenter extends MvpBasePresenterRest<Regist
 
     private final AuthController authController;
 
-    private final PreferenceController preferenceController;
-
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Inject
-    public RegisterFragmentPresenter(AuthController authController,
-                                     PreferenceController preferenceController) {
+    public RegisterFragmentPresenter(AuthController authController) {
         this.authController = authController;
-        this.preferenceController = preferenceController;
     }
 
     @Override
@@ -33,16 +30,23 @@ public final class RegisterFragmentPresenter extends MvpBasePresenterRest<Regist
     }
 
     @Override
-    public void registerAccount(String firstName, String lastName, String email, String password, String rePassword) {
-        if (StringUtils.isAnyNullOrEmpty(firstName, lastName, email, password, rePassword)) {
+    public void registerAccount(String username, String email, String password, String rePassword) {
+        if (StringUtils.isAnyNullOrEmpty(username, email, password, rePassword)) {
             getView().showDataFillError();
         } else if (!StringUtils.isEmailValid(email)) {
-            getView().emailNotValidError();
+            getView().showEmailNotValidError();
         } else if (password.length() < 6) {
             getView().showPasswordTooShortError();
         } else if (!password.equals(rePassword)) {
             getView().showPasswordsAreDifferentError();
         } else {
+            subscriptions.add(authController.register(username, email, password)
+                    .compose(RxTransformers.applyCompletableSchedulers())
+                    .subscribe(() -> getView().showRegisterSuccessView(),
+                            throwable -> {
+                                Timber.d("Register failed", throwable.getLocalizedMessage());
+                                getView().showRegistrationFailedError();
+                            }));
             getView().showRegisterSuccessView();
         }
     }

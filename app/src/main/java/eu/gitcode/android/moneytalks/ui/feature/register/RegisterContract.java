@@ -3,7 +3,7 @@ package eu.gitcode.android.moneytalks.ui.feature.register;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpPresenterRest;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpViewRest;
 
-public interface RegisterContract {
+interface RegisterContract {
     interface View extends MvpViewRest {
 
         void showEmailTakenError();
@@ -16,11 +16,12 @@ public interface RegisterContract {
 
         void showPasswordTooShortError();
 
-        void emailNotValidError();
+        void showEmailNotValidError();
+
+        void showRegistrationFailedError();
     }
 
     interface Presenter extends MvpPresenterRest<View> {
-        void registerAccount(String firstName, String lastName, String email, String password,
-                             String rePassword);
+        void registerAccount(String username, String email, String password, String rePassword);
     }
 }

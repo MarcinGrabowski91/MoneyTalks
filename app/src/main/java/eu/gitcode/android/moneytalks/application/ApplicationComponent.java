@@ -5,9 +5,9 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import eu.gitcode.android.moneytalks.DebugMetricsHelper;
+import eu.gitcode.android.moneytalks.api.ApiModule;
 import eu.gitcode.android.moneytalks.controllers.AuthController;
 import eu.gitcode.android.moneytalks.controllers.PreferenceController;
-import eu.gitcode.android.moneytalks.dagger.modules.AppModule;
 import eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesComponent;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseComponent;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.list.ExpensesComponent;
@@ -26,9 +26,8 @@ import eu.gitcode.android.moneytalks.ui.feature.summary.SummaryComponent;
 
 @Singleton
 @Component(
-        modules = {AppModule.class}
+        modules = {AppModule.class, ApiModule.class}
 )
-
 public interface ApplicationComponent {
     DebugMetricsHelper getDebugMetricsHelper();
 

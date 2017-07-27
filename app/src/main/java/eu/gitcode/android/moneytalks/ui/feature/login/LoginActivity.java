@@ -10,7 +10,9 @@ import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
 public class LoginActivity extends BaseActivity {
 
     public static void startActivity(Context context) {
-        context.startActivity(new Intent(context, LoginActivity.class));
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     @Override
