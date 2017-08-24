@@ -41,7 +41,7 @@ public class AddEditNoteActivity extends BaseActivity {
             if (getIntent().hasExtra(NOTE)) {
                 Note note = getIntent().getParcelableExtra(NOTE);
                 addEditNoteFragment = AddEditNoteFragment.newInstance(note);
-                setUpToolbar(note.title());
+                setUpToolbar(note.name());
             } else {
                 addEditNoteFragment = new AddEditNoteFragment();
                 setUpToolbar(getString(R.string.new_note));

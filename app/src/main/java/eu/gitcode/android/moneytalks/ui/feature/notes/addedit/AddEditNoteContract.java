@@ -14,6 +14,6 @@ public interface AddEditNoteContract {
     interface Presenter extends MvpPresenterRest<View> {
         void handleNoteData(Note note);
 
-        void addOrUpdateNote();
+        void addOrUpdateNote(String name, String content);
     }
 }

@@ -1,6 +1,5 @@
 package eu.gitcode.android.moneytalks.ui.feature.notes.addedit;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,35 +7,23 @@ import android.support.design.widget.TextInputEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-
-import org.joda.time.DateTime;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.models.ui.Note;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
-import eu.gitcode.android.moneytalks.utils.DateUtils;
 
 import static android.app.Activity.RESULT_OK;
 
 public class AddEditNoteFragment extends BaseMvpFragment<AddEditNoteContract.View,
-        AddEditNoteContract.Presenter> implements AddEditNoteContract.View,
-        DatePickerDialog.OnDateSetListener {
+        AddEditNoteContract.Presenter> implements AddEditNoteContract.View {
     public static final String TAG = AddEditNoteFragment.class.getSimpleName();
 
     @BindView(R.id.title_edit)
     TextInputEditText titleEdit;
-    @BindView(R.id.date_edit)
-    TextInputEditText dateEdit;
     @BindView(R.id.content_edit)
     TextInputEditText contentEdit;
-
-    DatePickerDialog datePickerDialog;
-
-    DateTime dateTime = DateTime.now();
 
     public static AddEditNoteFragment newInstance(Note note) {
         AddEditNoteFragment addEditNoteFragment = new AddEditNoteFragment();
@@ -59,7 +46,6 @@ public class AddEditNoteFragment extends BaseMvpFragment<AddEditNoteContract.Vie
         if (getArguments() != null && getArguments().containsKey(AddEditNoteActivity.NOTE)) {
             Note note = getArguments().getParcelable(AddEditNoteActivity.NOTE);
             if (note != null) {
-                dateTime = note.date();
                 getPresenter().handleNoteData(note);
             }
         }
@@ -74,11 +60,6 @@ public class AddEditNoteFragment extends BaseMvpFragment<AddEditNoteContract.Vie
         return component.getAddEditNotePresenter();
     }
 
-    @OnClick(R.id.date_edit)
-    void onDateClick() {
-        showDatePickerDialog();
-    }
-
     @Override
     public void showViewOnError(String text) {
         showSnackbar(text);
@@ -86,8 +67,7 @@ public class AddEditNoteFragment extends BaseMvpFragment<AddEditNoteContract.Vie
 
     @Override
     public void showNoteData(Note note) {
-        titleEdit.setText(note.title());
-        dateEdit.setText(DateUtils.getLongDateStringFromDateTime(note.date()));
+        titleEdit.setText(note.name());
         contentEdit.setText(note.content());
     }
 
@@ -98,20 +78,8 @@ public class AddEditNoteFragment extends BaseMvpFragment<AddEditNoteContract.Vie
     }
 
     public void addOrUpdateNote() {
-        getPresenter().addOrUpdateNote();
+        getPresenter().addOrUpdateNote(titleEdit.getText().toString(),
+                contentEdit.getText().toString());
     }
 
-
-    private void showDatePickerDialog() {
-        datePickerDialog = new DatePickerDialog(
-                getContext(), this, dateTime.getYear(), dateTime.getMonthOfYear() - 1,
-                dateTime.getDayOfMonth());
-        datePickerDialog.show();
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        dateTime = new DateTime(year, month, dayOfMonth, 0, 0);
-        dateEdit.setText(DateUtils.getLongDateStringFromDateTime(dateTime));
-    }
 }

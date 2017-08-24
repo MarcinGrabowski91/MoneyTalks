@@ -1,5 +1,7 @@
 package eu.gitcode.android.moneytalks.ui.feature.notes.list;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,9 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.joda.time.DateTime;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,6 +22,11 @@ import eu.gitcode.android.moneytalks.enumeration.ItemActionChooserEnum;
 import eu.gitcode.android.moneytalks.models.ui.Note;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 import eu.gitcode.android.moneytalks.ui.feature.notes.addedit.AddEditNoteActivity;
+import eu.gitcode.android.moneytalks.ui.feature.notes.show.NoteActivity;
+import onactivityresult.ActivityResult;
+import onactivityresult.OnActivityResult;
+
+import static eu.gitcode.android.moneytalks.ui.feature.notes.addedit.AddEditNoteActivity.ADD_EDIT_NOTE_REQUEST_CODE;
 
 public class NotesFragment extends BaseMvpFragment<NotesAdapterContract.View,
         NotesAdapterContract.Presenter> implements NotesAdapterContract.View {
@@ -66,25 +70,7 @@ public class NotesFragment extends BaseMvpFragment<NotesAdapterContract.View,
     }
 
     @Override
-    public void showNotesData() {
-        //TODO load notes data from the server
-        List<Note> notesList = new ArrayList<>();
-        notesList.add(Note.builder().title("Lubie liczyc pieniadze")
-                .content("Musze pamietac o kasie")
-                .date(DateTime.now().minusMonths(2)).build());
-        notesList.add(Note.builder().title("Dawid ukradl worek drobnych")
-                .content("Trzeba zabrac drobne, bo jak nie zabiore, to bedzie zle i drobne " +
-                        "zostana nieodzyskane, czego bardzo nie chcemy")
-                .date(DateTime.now())
-                .build());
-        notesList.add(notesList.get(0));
-        notesList.add(notesList.get(1));
-        notesList.add(notesList.get(0));
-        notesList.add(notesList.get(1));
-        notesList.add(notesList.get(0));
-        notesList.add(notesList.get(1));
-        notesList.add(notesList.get(0));
-        notesList.add(notesList.get(1));
+    public void showNotesData(List<Note> notesList) {
         adapter.setNotes(notesList);
     }
 
@@ -93,22 +79,50 @@ public class NotesFragment extends BaseMvpFragment<NotesAdapterContract.View,
         getPresenter().handleNotesData();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ActivityResult.onResult(requestCode, resultCode, data).into(this);
+    }
+
+    @OnActivityResult(requestCode = ADD_EDIT_NOTE_REQUEST_CODE, resultCodes = {Activity.RESULT_OK})
+    void onAddEditResult() {
+        getPresenter().handleNotesData();
+    }
+
     private void setupRecyclerView() {
-        NotesViewHolder.NoteViewHolderListener listener = note ->
+        NotesViewHolder.NoteViewHolderListener listener = new NotesViewHolder.NoteViewHolderListener() {
+            @Override
+            public void onNoteLongClicked(Note note) {
                 new AlertDialog.Builder(getContext())
                         .setItems(ItemActionChooserEnum.getNamesResArray(getResources()),
                                 (dialog, which) -> {
                                     if (ItemActionChooserEnum.values()[which]
                                             .equals(ItemActionChooserEnum.EDIT)) {
-                                        AddEditNoteActivity.startActivityForResult(this, note);
+                                        startAddEditNoteActivity(note);
                                     } else if (ItemActionChooserEnum.values()[which]
                                             .equals(ItemActionChooserEnum.REMOVE)) {
                                         showRemoveNoteDialog(note);
                                     }
                                 }).show();
+            }
+
+            @Override
+            public void onNoteClicked(Note note) {
+                startNoteActivity(note);
+            }
+        };
         adapter = new NotesAdapter(listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    private void startAddEditNoteActivity(Note note) {
+        AddEditNoteActivity.startActivityForResult(this, note);
+    }
+
+    private void startNoteActivity(Note note) {
+        NoteActivity.startActivityForResult(this, note);
     }
 
     private void showRemoveNoteDialog(Note note) {

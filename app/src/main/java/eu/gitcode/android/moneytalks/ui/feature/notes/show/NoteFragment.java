@@ -1,6 +1,7 @@
 package eu.gitcode.android.moneytalks.ui.feature.notes.show;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +17,10 @@ import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.models.ui.Note;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 import eu.gitcode.android.moneytalks.ui.feature.notes.addedit.AddEditNoteActivity;
-import eu.gitcode.android.moneytalks.utils.DateUtils;
+import onactivityresult.ActivityResult;
+import onactivityresult.OnActivityResult;
+
+import static eu.gitcode.android.moneytalks.ui.feature.notes.addedit.AddEditNoteActivity.ADD_EDIT_NOTE_REQUEST_CODE;
 
 public class NoteFragment extends BaseMvpFragment<NoteContract.View,
         NoteContract.Presenter> implements NoteContract.View {
@@ -67,13 +71,24 @@ public class NoteFragment extends BaseMvpFragment<NoteContract.View,
 
     @Override
     public void showNoteData(Note note) {
-        titleTxt.setText(note.title());
-        dateTxt.setText(DateUtils.getLongDateStringFromDateTime(note.date()));
+        titleTxt.setText(note.name());
         contentTxt.setText(note.content());
     }
 
     @Override
     public void showRemoveSuccessView() {
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ActivityResult.onResult(requestCode, resultCode, data).into(this);
+    }
+
+    @OnActivityResult(requestCode = ADD_EDIT_NOTE_REQUEST_CODE, resultCodes = {Activity.RESULT_OK})
+    void onAddEditResult() {
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
     }

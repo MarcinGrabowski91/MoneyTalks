@@ -2,11 +2,14 @@ package eu.gitcode.android.moneytalks.models.ui;
 
 
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
-import org.joda.time.DateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import eu.gitcode.android.moneytalks.models.api.NoteRest;
 
 @AutoValue
 public abstract class Note implements Parcelable {
@@ -14,25 +17,35 @@ public abstract class Note implements Parcelable {
         return new AutoValue_Note.Builder();
     }
 
-    @Nullable
+    public static Note fromRest(NoteRest noteRest) {
+        return Note.builder().id(noteRest.id()).name(noteRest.name()).content(noteRest.content())
+                .build();
+    }
+
+    public static List<Note> fromRest(List<NoteRest> noteRestsList) {
+        if (noteRestsList != null) {
+            List<Note> notesList = new ArrayList<>(noteRestsList.size());
+            for (NoteRest noteRest : noteRestsList) {
+                notesList.add(Note.fromRest(noteRest));
+            }
+            return notesList;
+        }
+        return Collections.emptyList();
+    }
+
     public abstract Long id();
 
-    public abstract String title();
+    public abstract String name();
 
-    @Nullable
     public abstract String content();
-
-    public abstract DateTime date();
 
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder id(Long id);
 
-        public abstract Builder title(String title);
+        public abstract Builder name(String name);
 
         public abstract Builder content(String content);
-
-        public abstract Builder date(DateTime date);
 
         public abstract Note build();
     }

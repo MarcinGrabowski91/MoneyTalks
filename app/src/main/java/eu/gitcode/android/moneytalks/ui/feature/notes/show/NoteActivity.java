@@ -3,6 +3,7 @@ package eu.gitcode.android.moneytalks.ui.feature.notes.show;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,8 @@ import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.models.ui.Note;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
+
+import static eu.gitcode.android.moneytalks.ui.feature.notes.addedit.AddEditNoteActivity.ADD_EDIT_NOTE_REQUEST_CODE;
 
 public class NoteActivity extends BaseActivity {
 
@@ -25,13 +28,19 @@ public class NoteActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
+    public static void startActivityForResult(Fragment fragment, Note note) {
+        Intent intent = new Intent(fragment.getContext(), NoteActivity.class);
+        intent.putExtra(NOTE, note);
+        fragment.startActivityForResult(intent, ADD_EDIT_NOTE_REQUEST_CODE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity_layout);
         if (savedInstanceState == null && getIntent().hasExtra(NOTE)) {
             Note note = getIntent().getParcelableExtra(NOTE);
-            setUpToolbar(note.title());
+            setUpToolbar(note.name());
             replaceFragment(R.id.fragment_container, NoteFragment.newInstance(note),
                     NoteFragment.TAG).commit();
         } else {

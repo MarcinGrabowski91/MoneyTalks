@@ -2,23 +2,24 @@ package eu.gitcode.android.moneytalks.ui.feature.notes.list;
 
 import javax.inject.Inject;
 
-import eu.gitcode.android.moneytalks.controllers.PreferenceController;
+import eu.gitcode.android.moneytalks.controllers.NotesController;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;
 import eu.gitcode.android.moneytalks.models.ui.Note;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
+import eu.gitcode.android.moneytalks.utils.RxTransformers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 @FragmentScope
 public final class NotesFragmentPresenter extends MvpBasePresenterRest<NotesAdapterContract.View>
         implements NotesAdapterContract.Presenter {
-
-    private final PreferenceController preferenceController;
+    private final NotesController notesController;
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Inject
-    public NotesFragmentPresenter(PreferenceController preferenceController) {
-        this.preferenceController = preferenceController;
+    public NotesFragmentPresenter(NotesController notesController) {
+        this.notesController = notesController;
     }
 
     @Override
@@ -29,7 +30,12 @@ public final class NotesFragmentPresenter extends MvpBasePresenterRest<NotesAdap
 
     @Override
     public void handleNotesData() {
-        getView().showNotesData();
+        subscriptions.add(notesController.getNotes()
+                .map(Note::fromRest)
+                .compose(RxTransformers.applySchedulers())
+                .subscribe(notes -> getView().showNotesData(notes),
+                        throwable -> Timber.d("Error during notes loading: %s",
+                                throwable.getLocalizedMessage())));
     }
 
     @Override

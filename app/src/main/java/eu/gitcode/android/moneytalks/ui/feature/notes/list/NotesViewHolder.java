@@ -10,8 +10,6 @@ import butterknife.OnLongClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.models.ui.Note;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseViewHolder;
-import eu.gitcode.android.moneytalks.ui.feature.notes.show.NoteActivity;
-import eu.gitcode.android.moneytalks.utils.DateUtils;
 
 public class NotesViewHolder extends BaseViewHolder<Note> {
 
@@ -36,7 +34,7 @@ public class NotesViewHolder extends BaseViewHolder<Note> {
 
     @OnClick(R.id.card_view)
     void onCardClick() {
-        NoteActivity.startActivity(itemView.getContext(), note);
+        listener.onNoteClicked(note);
     }
 
     @OnLongClick(R.id.card_view)
@@ -48,13 +46,13 @@ public class NotesViewHolder extends BaseViewHolder<Note> {
     @Override
     public void bind(Note item) {
         this.note = item;
-        titleTxt.setText(item.title());
+        titleTxt.setText(item.name());
         contentTxt.setText(item.content());
-        dateTxt.setText(DateUtils.getShortDateStringFromDateTime(item.date()));
     }
 
     public interface NoteViewHolderListener {
         void onNoteLongClicked(Note note);
-    }
 
+        void onNoteClicked(Note note);
+    }
 }

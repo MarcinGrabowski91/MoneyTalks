@@ -92,4 +92,10 @@ public class ApiModule {
     BudgetApi provideBudgetApi(Retrofit retrofit) {
         return retrofit.create(BudgetApi.class);
     }
+
+    @Singleton
+    @Provides
+    NotesApi provideNotesApi(Retrofit retrofit) {
+        return retrofit.create(NotesApi.class);
+    }
 }
