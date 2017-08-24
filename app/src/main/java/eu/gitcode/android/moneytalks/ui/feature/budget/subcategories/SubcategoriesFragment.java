@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,10 +23,13 @@ import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.enumeration.ItemActionChooserEnum;
 import eu.gitcode.android.moneytalks.models.ui.Subcategory;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
+import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.list.ExpensesActivity;
 
 import static android.app.Activity.RESULT_OK;
 import static eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity.SUBCATEGORY;
 import static eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity.CATEGORY_ID;
+import static eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity.IS_EXPENSES_PATH;
+import static eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity.SUBCATEGORIES;
 
 public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract.View,
         SubcategoriesContract.Presenter> implements SubcategoriesContract.View {
@@ -32,8 +37,22 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.floating_btn)
+    FloatingActionButton floatingActionButton;
 
     SubcategoriesAdapter adapter;
+
+    public static SubcategoriesFragment newInstance(Long id, boolean isExpensesPath,
+                                                    List<Subcategory> subcategoriesList) {
+        SubcategoriesFragment subcategoriesFragment = new SubcategoriesFragment();
+        Bundle args = new Bundle();
+        args.putLong(CATEGORY_ID, id);
+        args.putBoolean(IS_EXPENSES_PATH, isExpensesPath);
+        args.putParcelableArrayList(SUBCATEGORIES, new ArrayList<>(subcategoriesList));
+        subcategoriesFragment.setArguments(args);
+
+        return subcategoriesFragment;
+    }
 
     public static SubcategoriesFragment newInstance(Long id) {
         SubcategoriesFragment subcategoriesFragment = new SubcategoriesFragment();
@@ -57,7 +76,13 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
             getPresenter().saveCategoryId(getArguments().getLong(CATEGORY_ID));
         }
         setupRecyclerView();
-        getPresenter().loadSubcategories();
+        List<Subcategory> subcategoriesList = getArguments().getParcelableArrayList(SUBCATEGORIES);
+        if (subcategoriesList != null) {
+            showSubcategoriesList(subcategoriesList);
+            floatingActionButton.setVisibility(View.GONE);
+        } else {
+            getPresenter().loadSubcategories();
+        }
     }
 
     @Override
@@ -74,7 +99,7 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
         final EditText titleEdit = new EditText(getContext());
         new AlertDialog.Builder(getContext())
                 .setView(titleEdit)
-                .setTitle(R.string.title)
+                .setTitle(R.string.new_subcategory_title)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) ->
                         getPresenter().handleAddSubcategory(titleEdit.getText().toString()))
                 .setNegativeButton(R.string.cancel, (dialog, whichButton) -> { // no-op
@@ -116,10 +141,14 @@ public class SubcategoriesFragment extends BaseMvpFragment<SubcategoriesContract
 
             @Override
             public void onSubcategoryClicked(Subcategory subcategory) {
-                Intent intent = new Intent();
-                intent.putExtra(SUBCATEGORY, subcategory);
-                getActivity().setResult(RESULT_OK, intent);
-                getActivity().finish();
+                if (getArguments().getBoolean(IS_EXPENSES_PATH, false)) {
+                    ExpensesActivity.startActivity(getContext(), subcategory.name(), subcategory.transactionsList());
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra(SUBCATEGORY, subcategory);
+                    getActivity().setResult(RESULT_OK, intent);
+                    getActivity().finish();
+                }
             }
         };
 

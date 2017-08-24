@@ -13,10 +13,12 @@ import android.widget.TextView;
 import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
+
+import static eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show.ExpenseActivity.TRANSACTION;
 
 public class ExpenseFragment extends BaseMvpFragment<ExpenseContract.View,
         ExpenseContract.Presenter> implements ExpenseContract.View {
@@ -37,10 +39,10 @@ public class ExpenseFragment extends BaseMvpFragment<ExpenseContract.View,
     @BindView(R.id.description_txt)
     TextView descriptionTxt;
 
-    public static ExpenseFragment newInstance(Expense expense) {
+    public static ExpenseFragment newInstance(Transaction expense) {
         ExpenseFragment expenseFragment = new ExpenseFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ExpenseActivity.EXPENSE, expense);
+        args.putParcelable(TRANSACTION, expense);
         expenseFragment.setArguments(args);
 
         return expenseFragment;
@@ -56,7 +58,7 @@ public class ExpenseFragment extends BaseMvpFragment<ExpenseContract.View,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
-            getPresenter().handleExpenseData(getArguments().getParcelable(ExpenseActivity.EXPENSE));
+            getPresenter().handleExpenseData(getArguments().getParcelable(TRANSACTION));
         }
     }
 
@@ -74,15 +76,10 @@ public class ExpenseFragment extends BaseMvpFragment<ExpenseContract.View,
     }
 
     @Override
-    public void showExpenseData(Expense expense) {
-        titleTxt.setText(expense.title());
-        dateTxt.setText(DateUtils.getLongDateStringFromDateTime(expense.date()));
-        costTxt.setText(String.format(getString(R.string.currency_amount), expense.cost()));
-        if (expense.category() != null) {
-            //noinspection ConstantConditions
-            categoryTxt.setText(expense.category().name());
-        }
-        descriptionTxt.setText(expense.description());
+    public void showExpenseData(Transaction transaction) {
+        titleTxt.setText(transaction.name());
+        dateTxt.setText(DateUtils.getLongDateStringFromDateTime(transaction.date()));
+        costTxt.setText(String.format(getString(R.string.currency_amount), transaction.value()));
     }
 
     @Override

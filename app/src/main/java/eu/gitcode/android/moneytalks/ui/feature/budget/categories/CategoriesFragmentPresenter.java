@@ -35,7 +35,7 @@ public final class CategoriesFragmentPresenter extends MvpBasePresenterRest<Cate
                 .compose(RxTransformers.applySchedulers())
                 .map(Category::fromRest)
                 .subscribe(categories -> getView().showCategoriesData(categories),
-                        throwable -> Timber.d("Loading categories failed")));
+                        throwable -> Timber.d("Loading categories failed: %s", throwable)));
     }
 
     @Override

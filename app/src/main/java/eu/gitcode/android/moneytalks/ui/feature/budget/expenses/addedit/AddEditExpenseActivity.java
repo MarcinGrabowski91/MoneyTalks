@@ -9,21 +9,21 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
 
 public class AddEditExpenseActivity extends BaseActivity {
 
-    public static final String EXPENSE = "NOTE";
+    public static final String TRANSACTION = "transaction";
 
     public static final int ADD_EDIT_EXPENSE_REQUEST_CODE = 1;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    public static void startActivityForResult(Fragment fragment, Expense expense) {
+    public static void startActivityForResult(Fragment fragment, Transaction transaction) {
         Intent intent = new Intent(fragment.getContext(), AddEditExpenseActivity.class);
-        intent.putExtra(EXPENSE, expense);
+        intent.putExtra(TRANSACTION, transaction);
         fragment.startActivityForResult(intent, ADD_EDIT_EXPENSE_REQUEST_CODE);
     }
 
@@ -38,10 +38,10 @@ public class AddEditExpenseActivity extends BaseActivity {
         setContentView(R.layout.base_activity_layout);
         if (savedInstanceState == null) {
             AddEditExpenseFragment addEditExpenseFragment;
-            if (getIntent().hasExtra(EXPENSE)) {
-                Expense expense = getIntent().getParcelableExtra(EXPENSE);
-                addEditExpenseFragment = AddEditExpenseFragment.newInstance(expense);
-                setUpToolbar(expense.title());
+            if (getIntent().hasExtra(TRANSACTION)) {
+                Transaction transaction = getIntent().getParcelableExtra(TRANSACTION);
+                addEditExpenseFragment = AddEditExpenseFragment.newInstance(transaction);
+                setUpToolbar(transaction.name());
             } else {
                 addEditExpenseFragment = new AddEditExpenseFragment();
                 setUpToolbar(getString(R.string.new_expense));

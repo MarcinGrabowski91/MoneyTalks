@@ -9,19 +9,19 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import eu.gitcode.android.moneytalks.R;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseActivity;
 
 public class ExpenseActivity extends BaseActivity {
 
-    public static final String EXPENSE = "NOTE";
+    public static final String TRANSACTION = "transaction";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    public static void startActivity(Context context, Expense expense) {
+    public static void startActivity(Context context, Transaction transaction) {
         Intent intent = new Intent(context, ExpenseActivity.class);
-        intent.putExtra(EXPENSE, expense);
+        intent.putExtra(TRANSACTION, transaction);
         context.startActivity(intent);
     }
 
@@ -30,9 +30,9 @@ public class ExpenseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity_layout);
 
-        if (savedInstanceState == null && getIntent().hasExtra(EXPENSE)) {
-            Expense expense = getIntent().getParcelableExtra(EXPENSE);
-            setUpToolbar(expense.title());
+        if (savedInstanceState == null && getIntent().hasExtra(TRANSACTION)) {
+            Transaction expense = getIntent().getParcelableExtra(TRANSACTION);
+            setUpToolbar(expense.name());
             replaceFragment(R.id.fragment_container, ExpenseFragment.newInstance(expense),
                     ExpenseFragment.TAG).commit();
         } else {

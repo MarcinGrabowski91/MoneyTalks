@@ -6,12 +6,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpenseViewHolder> {
 
     private ExpenseViewHolder.ExpenseViewHolderListener listener;
-    private List<Expense> expensesList = new ArrayList<>();
+    private List<Transaction> expensesList = new ArrayList<>();
 
     public ExpensesAdapter(ExpenseViewHolder.ExpenseViewHolderListener listener) {
         this.listener = listener;
@@ -25,7 +25,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpenseViewHolder> {
 
     @Override
     public void onBindViewHolder(ExpenseViewHolder holder, int position) {
-        Expense expense = expensesList.get(position);
+        Transaction expense = expensesList.get(position);
         holder.bind(expense);
     }
 
@@ -34,7 +34,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpenseViewHolder> {
         return expensesList.size();
     }
 
-    public void setExpenses(List<Expense> expensesList) {
+    public void setExpenses(List<Transaction> expensesList) {
         this.expensesList = expensesList;
         notifyDataSetChanged();
     }

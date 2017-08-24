@@ -86,7 +86,7 @@ public class CategoriesFragment extends BaseMvpFragment<CategoriesContract.View,
         final EditText titleEdit = new EditText(getContext());
         new AlertDialog.Builder(getContext())
                 .setView(titleEdit)
-                .setTitle(R.string.title)
+                .setTitle(R.string.new_category_title)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) ->
                         getPresenter().handleAddCategory(titleEdit.getText().toString()))
                 .setNegativeButton(R.string.cancel, (dialog, whichButton) -> { // no-op

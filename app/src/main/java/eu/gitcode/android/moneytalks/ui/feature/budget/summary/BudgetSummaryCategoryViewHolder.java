@@ -9,7 +9,6 @@ import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseViewHolder;
-import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.list.ExpensesActivity;
 
 public class BudgetSummaryCategoryViewHolder extends BaseViewHolder<Category> {
 
@@ -22,21 +21,34 @@ public class BudgetSummaryCategoryViewHolder extends BaseViewHolder<Category> {
     @BindView(R.id.percent_txt)
     TextView percentTxt;
 
-    public BudgetSummaryCategoryViewHolder(ViewGroup parent) {
+    private Category category;
+    private Listener listener;
+
+    public BudgetSummaryCategoryViewHolder(ViewGroup parent,
+                                           Listener listener) {
         super(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.budget_category_view_holder, parent, false));
+        this.listener = listener;
     }
 
     @OnClick(R.id.card_view)
     void onCardViewClicked() {
-        ExpensesActivity.startActivity(itemView.getContext(), nameTxt.getText().toString());
+        listener.onCategoryClicked(category);
     }
 
     @Override
     public void bind(Category item) {
-        //TODO load real data
+        category = item;
         nameTxt.setText(item.name());
-        spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), 1200f));
-        percentTxt.setText(String.format(itemView.getResources().getString(R.string.percent_amount), 23.0));
+        if (item.budgeted() == null) {
+            spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), 0f));
+        } else {
+            spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), item.budgeted()));
+            percentTxt.setText(String.format(itemView.getResources().getString(R.string.percent_amount), item.percentPerMonth()));
+        }
+    }
+
+    public interface Listener {
+        void onCategoryClicked(Category category);
     }
 }

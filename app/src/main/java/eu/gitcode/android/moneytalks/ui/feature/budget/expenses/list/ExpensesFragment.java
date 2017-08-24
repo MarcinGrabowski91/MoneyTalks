@@ -10,20 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
 import eu.gitcode.android.moneytalks.enumeration.ItemActionChooserEnum;
-import eu.gitcode.android.moneytalks.models.ui.Category;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseActivity;
+
+import static eu.gitcode.android.moneytalks.ui.feature.budget.expenses.list.ExpensesActivity.TRANSACTIONS_LIST;
 
 public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
         ExpensesContract.Presenter> implements ExpensesContract.View {
@@ -33,6 +31,15 @@ public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
     RecyclerView recyclerView;
 
     ExpensesAdapter adapter;
+
+    public static ExpensesFragment newInstance(List<Transaction> transactionsList) {
+        ExpensesFragment subcategoriesFragment = new ExpensesFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(TRANSACTIONS_LIST, new ArrayList<>(transactionsList));
+        subcategoriesFragment.setArguments(args);
+
+        return subcategoriesFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,11 +62,6 @@ public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
         return component.getExpensesPresenter();
     }
 
-    @OnClick(R.id.floating_btn)
-    void onFloatingBtnClick() {
-        AddEditExpenseActivity.startActivityForResult(this);
-    }
-
     @Override
     public void showViewOnError(String text) {
         showSnackbar(text);
@@ -67,19 +69,7 @@ public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
 
     @Override
     public void showExpensesData() {
-        //TODO load expenses data from the server
-        List<Expense> expensesList = new ArrayList<>();
-        expensesList.add(Expense.builder().title("Computer").cost(5200f).description("New computer")
-                .category(Category.builder().name("Inne").build()).date(DateTime.now()).build());
-        expensesList.add(Expense.builder().title("Camera").cost(1400.24f).date(DateTime.now())
-                .description("What a camera!").category(Category.builder().name("Takie owakie")
-                        .build()).build());
-        expensesList.add(Expense.builder().title("T-shirt").cost(42f).date(DateTime.now())
-                .category(Category.builder().name("Ubrania").build())
-                .description("Wonderful t-shirt").build());
-        expensesList.add(Expense.builder().title("Hat").cost(244f).description("What a style")
-                .date(DateTime.now()).category(Category.builder().name("Ubrania").build()).build());
-        adapter.setExpenses(expensesList);
+        adapter.setExpenses(getArguments().getParcelableArrayList(TRANSACTIONS_LIST));
     }
 
     @Override
@@ -88,16 +78,16 @@ public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
     }
 
     private void setupRecyclerView() {
-        ExpenseViewHolder.ExpenseViewHolderListener listener = expense ->
+        ExpenseViewHolder.ExpenseViewHolderListener listener = transaction ->
                 new AlertDialog.Builder(getContext())
                         .setItems(ItemActionChooserEnum.getNamesResArray(getResources()),
                                 (dialog, which) -> {
                                     if (ItemActionChooserEnum.values()[which]
                                             .equals(ItemActionChooserEnum.EDIT)) {
-                                        AddEditExpenseActivity.startActivityForResult(this, expense);
+                                        AddEditExpenseActivity.startActivityForResult(this, transaction);
                                     } else if (ItemActionChooserEnum.values()[which]
                                             .equals(ItemActionChooserEnum.REMOVE)) {
-                                        showRemoveExpenseDialog(expense);
+                                        showRemoveExpenseDialog(transaction);
                                     }
                                 }).show();
         adapter = new ExpensesAdapter(listener);
@@ -105,11 +95,11 @@ public class ExpensesFragment extends BaseMvpFragment<ExpensesContract.View,
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void showRemoveExpenseDialog(Expense expense) {
+    private void showRemoveExpenseDialog(Transaction transaction) {
         new AlertDialog.Builder(getContext())
                 .setMessage(R.string.remove_expense)
                 .setPositiveButton(R.string.yes, (dialog, which) ->
-                        getPresenter().handleRemoveExpense(expense))
+                        getPresenter().handleRemoveExpense(transaction))
                 .setNegativeButton(R.string.no, (dialog, which) -> { // no-op
                 }).create().show();
     }

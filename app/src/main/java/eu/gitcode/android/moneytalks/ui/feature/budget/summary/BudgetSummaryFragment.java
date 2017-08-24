@@ -13,18 +13,16 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.joda.time.Months;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
-import eu.gitcode.android.moneytalks.models.ui.Category;
+import eu.gitcode.android.moneytalks.models.ui.Budget;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseActivity;
+import eu.gitcode.android.moneytalks.ui.feature.budget.subcategories.SubcategoriesActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
 
 public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract.View,
@@ -63,9 +61,8 @@ public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract
         super.onViewCreated(view, savedInstanceState);
         showCurrentDate();
         setupRecyclerView();
-        getPresenter().handleBudgetData();
+        getPresenter().handleBudgetData(0);
     }
-
 
     @OnClick(R.id.floating_btn)
     void onFloatingBtnClick() {
@@ -76,12 +73,12 @@ public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract
     void onMonthBtnClicked() {
         View pickersView = getActivity().getLayoutInflater()
                 .inflate(R.layout.date_picker, null);
-        NumberPicker monthPicker = ButterKnife.findById(pickersView, R.id.month_picker);
+        NumberPicker monthPicker = pickersView.findViewById(R.id.month_picker);
         monthPicker.setDisplayedValues(getResources().getStringArray(R.array.months));
         monthPicker.setMinValue(0);
         monthPicker.setMaxValue(11);
         monthPicker.setValue(lastChosenDateTime.getMonthOfYear() - 1);
-        NumberPicker yearPicker = ButterKnife.findById(pickersView, R.id.year_picker);
+        NumberPicker yearPicker = pickersView.findViewById(R.id.year_picker);
         yearPicker.setMinValue(DateTime.now().getYear() - YEAR_RANGE);
         yearPicker.setMaxValue(DateTime.now().getYear() + YEAR_RANGE);
         yearPicker.setValue(lastChosenDateTime.getYear());
@@ -95,6 +92,9 @@ public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract
                     lastChosenDateTime = new DateTime(year, month, day, 0, 0);
                     String monthWithYear = DateUtils.getMonthWithYear(lastChosenDateTime);
                     dateTxt.setText(monthWithYear);
+                    int monthsDifference = Months.monthsBetween(DateTime.now().withDayOfMonth(1),
+                            lastChosenDateTime.withDayOfMonth(1)).getMonths();
+                    getPresenter().handleBudgetData(monthsDifference);
                 })
                 .setNegativeButton(R.string.cancel, (dialog, position) -> {
                 })
@@ -116,23 +116,13 @@ public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract
     }
 
     @Override
-    public void showBudgetData() {
+    public void showBudgetData(Budget budget) {
         //TODO load budget data from the server
         plannedBudgetTxt.setText(String.format(getString(R.string.currency_amount), 2500f));
-        spentBudgetTxt.setText(String.format(getString(R.string.currency_amount), 1000f));
-        summaryBudgetTxt.setText(String.format(getString(R.string.currency_amount), 1500f));
-        summaryBudgetTxt.setEnabled(true);
-        List<Category> categoriesList = new ArrayList<>();
-        categoriesList.add(Category.builder().name("Clothes").build());
-        categoriesList.add(Category.builder().name("Additional electronic devices").build());
-        categoriesList.add(Category.builder().name("Others").build());
-        categoriesList.add(Category.builder().name("Clothes").build());
-        categoriesList.add(Category.builder().name("Additional electronic devices").build());
-        categoriesList.add(Category.builder().name("Others").build());
-        categoriesList.add(Category.builder().name("Clothes").build());
-        categoriesList.add(Category.builder().name("Additional electronic devices").build());
-        categoriesList.add(Category.builder().name("Others").build());
-        adapter.setCategories(categoriesList);
+        spentBudgetTxt.setText(String.format(getString(R.string.currency_amount), budget.value()));
+        summaryBudgetTxt.setText(String.format(getString(R.string.currency_amount), budget.value()));
+        summaryBudgetTxt.setEnabled(2500 - budget.value() >= 0);
+        adapter.setCategories(budget.categoriesList());
     }
 
     private void showCurrentDate() {
@@ -140,7 +130,10 @@ public class BudgetSummaryFragment extends BaseMvpFragment<BudgetSummaryContract
     }
 
     private void setupRecyclerView() {
-        adapter = new BudgetSummaryAdapter();
+        BudgetSummaryCategoryViewHolder.Listener listener =
+                category -> SubcategoriesActivity.startActivity(getContext(), category.name(),
+                        category.id(), category.subcategoriesMonth(), true);
+        adapter = new BudgetSummaryAdapter(listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

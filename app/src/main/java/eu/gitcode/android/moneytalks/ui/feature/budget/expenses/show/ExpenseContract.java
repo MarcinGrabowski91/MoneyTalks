@@ -1,20 +1,20 @@
 package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show;
 
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpPresenterRest;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpViewRest;
 
 public interface ExpenseContract {
     interface View extends MvpViewRest {
-        void showExpenseData(Expense expense);
+        void showExpenseData(Transaction transaction);
 
         void showRemoveSuccessView();
     }
 
     interface Presenter extends MvpPresenterRest<View> {
-        Expense getExpense();
+        Transaction getExpense();
 
-        void handleExpenseData(Expense expense);
+        void handleExpenseData(Transaction transaction);
 
         void handleRemoveExpense();
     }

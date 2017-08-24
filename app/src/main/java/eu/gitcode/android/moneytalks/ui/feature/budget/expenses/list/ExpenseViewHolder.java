@@ -8,12 +8,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import eu.gitcode.android.moneytalks.R;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseViewHolder;
 import eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show.ExpenseActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
 
-public class ExpenseViewHolder extends BaseViewHolder<Expense> {
+public class ExpenseViewHolder extends BaseViewHolder<Transaction> {
 
     @BindView(R.id.name_txt)
     TextView nameTxt;
@@ -27,7 +27,7 @@ public class ExpenseViewHolder extends BaseViewHolder<Expense> {
     @BindView(R.id.date_txt)
     TextView dateTxt;
 
-    private Expense expense;
+    private Transaction transaction;
 
     private ExpenseViewHolderListener listener;
 
@@ -39,26 +39,25 @@ public class ExpenseViewHolder extends BaseViewHolder<Expense> {
 
     @OnClick(R.id.card_view)
     void onCardClick() {
-        ExpenseActivity.startActivity(itemView.getContext(), expense);
+        ExpenseActivity.startActivity(itemView.getContext(), transaction);
     }
 
     @OnLongClick(R.id.card_view)
     boolean onCardLongClick() {
-        listener.onExpenseLongClicked(expense);
+        listener.onExpenseLongClicked(transaction);
         return true;
     }
 
     @Override
-    public void bind(Expense item) {
-        this.expense = item;
-        nameTxt.setText(item.title());
-        descriptionTxt.setText(item.description());
-        spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), item.cost()));
+    public void bind(Transaction item) {
+        this.transaction = item;
+        nameTxt.setText(item.name());
+        spentTxt.setText(String.format(itemView.getResources().getString(R.string.currency_amount), item.value()));
         dateTxt.setText(DateUtils.getShortDateStringFromDateTime(item.date()));
     }
 
     public interface ExpenseViewHolderListener {
-        void onExpenseLongClicked(Expense expense);
+        void onExpenseLongClicked(Transaction transaction);
     }
 
 }

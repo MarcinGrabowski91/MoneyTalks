@@ -2,25 +2,20 @@ package eu.gitcode.android.moneytalks.ui.feature.budget.expenses.show;
 
 import javax.inject.Inject;
 
-import eu.gitcode.android.moneytalks.controllers.PreferenceController;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
 import rx.subscriptions.CompositeSubscription;
 
 @FragmentScope
 public final class ExpenseFragmentPresenter extends MvpBasePresenterRest<ExpenseContract.View>
         implements ExpenseContract.Presenter {
-
-    private final PreferenceController preferenceController;
-
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
-    private Expense expense;
+    private Transaction transaction;
 
     @Inject
-    public ExpenseFragmentPresenter(PreferenceController preferenceController) {
-        this.preferenceController = preferenceController;
+    public ExpenseFragmentPresenter() {
     }
 
     @Override
@@ -30,9 +25,9 @@ public final class ExpenseFragmentPresenter extends MvpBasePresenterRest<Expense
     }
 
     @Override
-    public void handleExpenseData(Expense expense) {
-        this.expense = expense;
-        getView().showExpenseData(expense);
+    public void handleExpenseData(Transaction transaction) {
+        this.transaction = transaction;
+        getView().showExpenseData(transaction);
     }
 
     @Override
@@ -41,7 +36,7 @@ public final class ExpenseFragmentPresenter extends MvpBasePresenterRest<Expense
     }
 
     @Override
-    public Expense getExpense() {
-        return expense;
+    public Transaction getExpense() {
+        return transaction;
     }
 }

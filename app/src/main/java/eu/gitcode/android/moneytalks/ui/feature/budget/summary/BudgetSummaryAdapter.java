@@ -12,10 +12,16 @@ public class BudgetSummaryAdapter extends RecyclerView.Adapter<BudgetSummaryCate
 
     private List<Category> categoriesList = new ArrayList<>();
 
+    private BudgetSummaryCategoryViewHolder.Listener listener;
+
+    public BudgetSummaryAdapter(BudgetSummaryCategoryViewHolder.Listener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public BudgetSummaryCategoryViewHolder onCreateViewHolder(ViewGroup parent,
                                                               int viewType) {
-        return new BudgetSummaryCategoryViewHolder(parent);
+        return new BudgetSummaryCategoryViewHolder(parent, listener);
     }
 
     @Override

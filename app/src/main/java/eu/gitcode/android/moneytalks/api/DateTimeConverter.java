@@ -12,16 +12,14 @@ import org.joda.time.DateTimeZone;
 
 import java.lang.reflect.Type;
 
-import eu.gitcode.android.moneytalks.utils.DateUtils;
-
 class DateTimeConverter implements JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
 
     public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(DateUtils.ISO8601.print(src));
+        return new JsonPrimitive(src.getMillis());
     }
 
     @Override
     public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-        return new DateTime(json.getAsString(), DateTimeZone.UTC);
+        return new DateTime(json.getAsLong(), DateTimeZone.UTC);
     }
 }

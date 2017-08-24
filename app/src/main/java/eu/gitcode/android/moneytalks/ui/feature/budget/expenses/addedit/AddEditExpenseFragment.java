@@ -17,16 +17,18 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import eu.gitcode.android.moneytalks.R;
 import eu.gitcode.android.moneytalks.application.App;
-import eu.gitcode.android.moneytalks.models.ui.Expense;
 import eu.gitcode.android.moneytalks.models.ui.Subcategory;
+import eu.gitcode.android.moneytalks.models.ui.Transaction;
 import eu.gitcode.android.moneytalks.ui.common.base.BaseMvpFragment;
 import eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity;
 import eu.gitcode.android.moneytalks.utils.DateUtils;
+import eu.gitcode.android.moneytalks.utils.UIUtils;
 import onactivityresult.ActivityResult;
 import onactivityresult.OnActivityResult;
 
 import static android.app.Activity.RESULT_OK;
 import static eu.gitcode.android.moneytalks.ui.feature.budget.categories.CategoriesActivity.SUBCATEGORY;
+import static eu.gitcode.android.moneytalks.ui.feature.budget.expenses.addedit.AddEditExpenseActivity.TRANSACTION;
 
 public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContract.View,
         AddEditExpenseContract.Presenter> implements AddEditExpenseContract.View,
@@ -48,10 +50,10 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
 
     DateTime dateTime = DateTime.now();
 
-    public static AddEditExpenseFragment newInstance(Expense expense) {
+    public static AddEditExpenseFragment newInstance(Transaction transaction) {
         AddEditExpenseFragment addEditExpenseFragment = new AddEditExpenseFragment();
         Bundle args = new Bundle();
-        args.putParcelable(AddEditExpenseActivity.EXPENSE, expense);
+        args.putParcelable(TRANSACTION, transaction);
         addEditExpenseFragment.setArguments(args);
 
         return addEditExpenseFragment;
@@ -66,11 +68,11 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null && getArguments().containsKey(AddEditExpenseActivity.EXPENSE)) {
-            Expense expense = getArguments().getParcelable(AddEditExpenseActivity.EXPENSE);
-            if (expense != null) {
-                dateTime = expense.date();
-                getPresenter().handleExpenseData(expense);
+        if (getArguments() != null && getArguments().containsKey(TRANSACTION)) {
+            Transaction transaction = getArguments().getParcelable(TRANSACTION);
+            if (transaction != null) {
+                dateTime = transaction.date();
+                getPresenter().handleExpenseData(transaction);
             }
         }
     }
@@ -100,15 +102,10 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
     }
 
     @Override
-    public void showExpenseData(Expense expense) {
-        titleEdit.setText(expense.title());
-        dateEdit.setText(DateUtils.getLongDateStringFromDateTime(expense.date()));
-        costEdit.setText(String.format(getString(R.string.currency_amount), expense.cost()));
-        if (expense.category() != null) {
-            //noinspection ConstantConditions
-            categoryEdit.setText(expense.category().name());
-        }
-        descriptionEdit.setText(expense.description());
+    public void showExpenseData(Transaction transaction) {
+        titleEdit.setText(transaction.name());
+        dateEdit.setText(DateUtils.getLongDateStringFromDateTime(transaction.date()));
+        costEdit.setText(String.format(getString(R.string.currency_amount), transaction.value()));
     }
 
     @Override
@@ -134,11 +131,16 @@ public class AddEditExpenseFragment extends BaseMvpFragment<AddEditExpenseContra
         if (RESULT_OK == resultCode && data.hasExtra(SUBCATEGORY)) {
             Subcategory subcategory = data.getParcelableExtra(SUBCATEGORY);
             categoryEdit.setText(subcategory.name());
+            getPresenter().saveSubcategoryId(subcategory.id());
         }
     }
 
     public void addOrUpdateExpense() {
-        getPresenter().addOrUpdateExpense();
+        if (!UIUtils.showFillError(getContext(), titleEdit, dateEdit, costEdit, categoryEdit)) {
+            getPresenter().addOrUpdateExpense(titleEdit.getText().toString(), dateTime,
+                    Float.parseFloat(costEdit.getText().toString()));
+        }
+
     }
 
     private void showDatePickerDialog() {

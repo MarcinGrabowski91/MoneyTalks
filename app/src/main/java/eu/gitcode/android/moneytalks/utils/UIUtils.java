@@ -2,6 +2,7 @@ package eu.gitcode.android.moneytalks.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,18 +30,16 @@ public final class UIUtils {
         }
     }
 
-    public static void showFillError(Context context, TextInputLayout... textInputLayouts) {
+    public static boolean showFillError(Context context, TextInputEditText... textInputEditTexts) {
         boolean isFocused = false;
-        for (TextInputLayout textInputLayout : textInputLayouts) {
-            EditText editText = textInputLayout.getEditText();
-            if (editText != null && StringUtils.isNullOrEmpty(textInputLayout.getEditText().getText().toString())) {
-                textInputLayout.setError(context.getString(R.string.field_cannot_be_empty));
-                if (!isFocused) {
-                    editText.requestFocus();
+        for (TextInputEditText textInputEditText : textInputEditTexts) {
+            if (textInputEditText != null && StringUtils.isNullOrEmpty(textInputEditText.getText().toString())) {
+                textInputEditText.setError(context.getString(R.string.field_cannot_be_empty));
+                textInputEditText.requestFocus();
                     isFocused = true;
-                }
             }
         }
+        return isFocused;
     }
 
     public static void hideFieldsError(EditText... editTexts) {
