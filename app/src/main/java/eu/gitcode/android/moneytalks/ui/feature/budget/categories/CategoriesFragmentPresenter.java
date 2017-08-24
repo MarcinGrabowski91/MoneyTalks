@@ -45,7 +45,12 @@ public final class CategoriesFragmentPresenter extends MvpBasePresenterRest<Cate
 
     @Override
     public void handleAddCategory(String title) {
-        // getView().showCategoriesData();
+        budgetController.addCategory(title)
+                .andThen(budgetController.getCategories())
+                .map(Category::fromRest)
+                .compose(RxTransformers.applySchedulers())
+                .subscribe(categories -> getView().showCategoriesData(categories),
+                        throwable -> Timber.d("Adding category failed"));
     }
 
     @Override

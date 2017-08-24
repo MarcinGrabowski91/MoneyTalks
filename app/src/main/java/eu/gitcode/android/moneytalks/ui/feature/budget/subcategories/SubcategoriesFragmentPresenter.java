@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import eu.gitcode.android.moneytalks.controllers.BudgetController;
 import eu.gitcode.android.moneytalks.dagger.scopes.FragmentScope;
+import eu.gitcode.android.moneytalks.models.api.CategoryRest;
 import eu.gitcode.android.moneytalks.models.ui.Category;
 import eu.gitcode.android.moneytalks.models.ui.Subcategory;
 import eu.gitcode.android.moneytalks.ui.common.base.MvpBasePresenterRest;
@@ -59,7 +60,20 @@ public final class SubcategoriesFragmentPresenter extends MvpBasePresenterRest<S
 
     @Override
     public void handleAddSubcategory(String title) {
-        //   getView().showSubcategoriesData();
+        budgetController.addSubcategory(categoryId, title)
+                .andThen(budgetController.getCategories())
+                .map(categoryRests -> {
+                    for (CategoryRest category : categoryRests) {
+                        //noinspection ConstantConditions
+                        if (category.id().equals(categoryId)) {
+                            return Subcategory.fromRest(category.subcategoriesRest());
+                        }
+                    }
+                    return null;
+                })
+                .compose(RxTransformers.applySchedulers())
+                .subscribe(categories -> getView().showSubcategoriesList(categories),
+                        throwable -> Timber.d("Adding category failed"));
     }
 
     @Override

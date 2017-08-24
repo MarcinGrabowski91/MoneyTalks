@@ -1,9 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.autoscout24.gradle.todo'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'com.frogermcs.androiddevmetrics'
-apply plugin: 'me.tatarka.retrolambda'
 
 ext {
     secrets = [
@@ -13,7 +11,7 @@ ext {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         applicationId "gitcode.eu.moneytalks"
@@ -29,7 +27,6 @@ android {
         debug {
             versionNameSuffix "-DEBUG"
             applicationIdSuffix ".debug"
-            testCoverageEnabled true
             debuggable true
             minifyEnabled true
             shrinkResources false
@@ -48,6 +45,8 @@ android {
         }
     }
 
+    flavorDimensions "main"
+
     productFlavors {
         mock {
             versionNameSuffix "-SNAPSHOT"
@@ -59,27 +58,10 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
-        // remove unaligned apk files
-        variant.assemble.doLast {
-            variant.outputs.each { output ->
-                println "aligned " + output.outputFile
-                println "unaligned " + output.packageApplication.outputFile
-
-                File unaligned = output.packageApplication.outputFile;
-                File aligned = output.outputFile
-                if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
-                    println "deleting " + unaligned.getName()
-                    unaligned.delete()
-                }
-            }
-        }
-    }
-
     // Always show the result of every unit test, even if it passes.
     testOptions.unitTests.all {
         testLogging {
-            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            events 'passed', 'skipped', 'failed', 'standard§§Out', 'standardError'
         }
     }
 
@@ -97,7 +79,7 @@ android {
     lintOptions {
         abortOnError false
     }
-
+    android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
 }
 
 dependencies {
@@ -105,6 +87,7 @@ dependencies {
     compile libs.timber
 
     // Support
+    implementation 'com.android.support:support-v4:26.0.1'
     compile libs.appCompat
     compile libs.recyclerView
     compile libs.design
@@ -118,7 +101,7 @@ dependencies {
 
     // Dagger
     compile libs.dagger
-    apt proc.dagger
+    annotationProcessor proc.dagger
     provided proc.javaxAnnotation
 
     //icepick
@@ -155,21 +138,21 @@ dependencies {
 
     //onActivityResult
     compile libs.onActivityResult
-    apt proc.onActivityResult
+    annotationProcessor proc.onActivityResult
 
     // View
     compile libs.butterKnife
-    apt proc.butterKnife
+    annotationProcessor proc.butterKnife
 
     // JodaTime
     compile libs.jodaTime
 
     // AutoValue
     provided proc.autoValue
-    apt proc.autoValue
-    apt proc.autoParcel
+    annotationProcessor proc.autoValue
+    annotationProcessor proc.autoParcel
     provided proc.autoGson
-    apt proc.autoGson
+    annotationProcessor proc.autoGson
 
     //retrofit
     compile libs.retrofit
@@ -182,44 +165,4 @@ dependencies {
 
     // LeakCanary
     compile libs.leakCanary
-
-    // Unit testing
-    testCompile(test.junit) {
-        exclude module: 'hamcrest-core'
-    }
-    testCompile test.hamcrest
-    testCompile test.mockito
-
-    androidTestCompile test.hamcrest
-    androidTestCompile libs.annotations
-    androidTestCompile(test.androidJUnitRunner) {
-        exclude module: 'support-annotations'
-    }
-    androidTestCompile(test.androidJUnit4Rules) {
-        exclude module: 'support-annotations'
-        exclude module: 'hamcrest-core'
-    }
-    androidTestCompile(test.espresso) {
-        exclude module: 'hamcrest-library'
-        exclude module: 'rules'
-        exclude module: 'runner'
-        exclude module: 'javax.annotation-api'
-        exclude module: 'support-annotations'
-    }
-    androidTestCompile(test.espressoContrib) {
-        exclude module: 'espresso-core'
-        exclude module: 'hamcrest-core'
-        exclude module: 'support-v4'
-        exclude module: 'appcompat-v7'
-        exclude module: 'recyclerview-v7'
-        exclude module: 'support-annotations'
-        exclude module: 'design'
-    }
-    androidTestCompile(test.espressoIntents) {
-        exclude module: 'espresso-core'
-        exclude module: 'support-annotations'
-    }
-    androidTestCompile(test.espressoIdlingResource) {
-        exclude module: 'espresso-core'
-    }
 }

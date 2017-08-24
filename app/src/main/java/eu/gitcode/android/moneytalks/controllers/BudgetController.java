@@ -7,6 +7,9 @@ import javax.inject.Singleton;
 
 import eu.gitcode.android.moneytalks.api.BudgetApi;
 import eu.gitcode.android.moneytalks.models.api.CategoryRest;
+import eu.gitcode.android.moneytalks.models.request.CategoryRequest;
+import eu.gitcode.android.moneytalks.models.request.SubcategoryRequest;
+import rx.Completable;
 import rx.Observable;
 
 @Singleton
@@ -20,5 +23,15 @@ public class BudgetController {
 
     public Observable<List<CategoryRest>> getCategories() {
         return budgetApi.getCategories();
+    }
+
+    public Completable addCategory(String title) {
+        CategoryRequest categoryRequest = CategoryRequest.create(title);
+        return budgetApi.addCategory(categoryRequest);
+    }
+
+    public Completable addSubcategory(long categoryId, String title) {
+        SubcategoryRequest subcategoryRequest = SubcategoryRequest.create(categoryId, title);
+        return budgetApi.addSubcategory(subcategoryRequest);
     }
 }
